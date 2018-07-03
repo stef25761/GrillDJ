@@ -13,4 +13,3 @@ app.use(express.static(path.join(__dirname,path.sep,'static',path.sep,'index.htm
 app.use('/static',express.static(path.join(__dirname,path.sep,'static')));
 
 server.listen(3000);
-static/index.html
