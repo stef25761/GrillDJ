@@ -11,6 +11,6 @@ websocket.init(server);
 
 app.get('/',(req,res)=>{
 //html ausliefern
-    //res.sendFile(__dirname + '/index.html');
+    res.sendFile(path.join(__dirname,path.sep,  'index.html'));
 });
 server.listen(3000);
