@@ -13,4 +13,4 @@ app.use('/',(req,res)=>{
 //html ausliefern
     res.sendFile(path.join(__dirname,path.sep,  'index.html'));
 });
-server.listen(80);
+server.listen(3000);
