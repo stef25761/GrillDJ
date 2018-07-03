@@ -9,8 +9,8 @@ const websocket=require(path.join(__dirname,path.sep,'websocket')).getWsInstance
 
 websocket.init(server);
 
-app.get('/',(req,res)=>{
+app.use('/',(req,res)=>{
 //html ausliefern
     res.sendFile(path.join(__dirname,path.sep,  'index.html'));
 });
-server.listen(3000);
+server.listen(80);
