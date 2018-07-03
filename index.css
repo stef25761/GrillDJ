@@ -1,0 +1,19 @@
+
+.logo {
+    padding: 10px 10px 0 10px;
+  }
+  
+  .name {
+    font-size: 14px;
+    color:white;
+    padding-top: 15px;
+  }
+  
+
+.panel-body{
+  border-left: 1px solid;
+  border-right: 1px solid;
+  border-bottom:1px solid;
+  border-top: 1px solid;
+  
+}
