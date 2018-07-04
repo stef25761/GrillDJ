@@ -8,7 +8,7 @@ const path=require('path');
 const websocket=require(path.join(__dirname,path.sep,'websocket')).getWsInstance();
 
 websocket.init(server);
-app.use('/',(req,res)=>{
+app.use('/index',(req,res)=>{
     res.sendFile(path.join(__dirname,path.sep,'static',path.sep,'index.html'));
 });
 
