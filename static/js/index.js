@@ -130,4 +130,21 @@ $(document).ready(function () {
         div.innerText = innerHTML;
         appendDiv.append(div);
     }
+    //socket.io verbindung
+
+    let socket = io();
+    //event wird serverseitig ausgelöst, wenn sich der client verbindet
+    socket.on('playListUpdate',(msg)=>{
+       console.log('playListUpdate '+JSON.stringify(msg));
+    });
+    socket.on('searchData',(msg)=>{
+       console.log('searchData '+JSON.stringify(msg));
+    });
+    //track hinzufügen
+    let id='1301WleyT98MSxVHPZCA6M';
+    socket.emit('addTrack',{trackId:id});
+    //nach artistName, trackName oder beidem suchen
+    let artistName="Slipknot";
+    let trackName="Wait and Bleed";
+    socket.emit('search',{artistName:artistName,trackName:trackName})
 });

@@ -14,4 +14,4 @@ app.use('/index',(req,res)=>{
 
 app.use('/static',express.static(path.join(__dirname,path.sep,'static')));
 
-server.listen(3000);
+server.listen(3001);
