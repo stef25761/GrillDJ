@@ -132,7 +132,7 @@ $(document).ready(function () {
     }
     //socket.io verbindung
 
-    let socket = io();
+    let socket = io('fs-inf-fl.berndlorenzen.de:3000');
     //event wird serverseitig ausgelöst, wenn sich der client verbindet
     socket.on('playListUpdate',(msg)=>{
        console.log('playListUpdate '+JSON.stringify(msg));
