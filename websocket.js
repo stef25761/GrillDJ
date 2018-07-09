@@ -20,15 +20,31 @@ class websocket {
             socket.on('addTrack',(data)=>{
                 console.log('addtrack '+data.trackId);
                 spotify.addTrack(data,(data)=>{
-                     this._io.emit('playListUpdate',data);
+                    if (data.statusCode===200){
+                        this._io.emit('playListUpdate',data);
+                    }else if(data.statusCode===401){
+                        spotify.refreshToken();
+                        spotify.addTrack(data,(data)=>{
+                            this._io.emit('playListUpdate',data);
+                        });
+                    }
+
+
                 });
             });
             socket.on('search',(data)=>{
                 console.log('search '+JSON.stringify(data));
                spotify.searchTracks(data,(data)=>{
-                   socket.emit('searchData',(data));
+                   if (data.statusCode===200){
+                       socket.emit('searchData',(data));
+                   }else if (data.statusCode===401){
+                       spotify.refreshToken();
+                       socket.emit('searchData',(data));
+                   }
+
                 });
             });
+
 
         });
 

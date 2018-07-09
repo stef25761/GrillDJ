@@ -19,3 +19,4 @@ neustarten dann sollten die befehle in cmd funktionieren
 4. npm install 
 
 5. node app.js startet die anwendung
+
