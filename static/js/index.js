@@ -9,6 +9,8 @@ $(document).ready(function () {
     let panelDefault= "panel panel-default";
     let panelHeading="panel-heading";
     let nextSongs=3;
+    //socket.io verbindung
+    let socket = io();
     $("#home").click(function (e) { 
       $("#fs").empty();
       let h3= document.createElement("h3");
@@ -65,7 +67,19 @@ $(document).ready(function () {
         divWishList.append(trackDiv);
         divWishList.append(submitDiv);
         $("#fs").append(divWishList);
-        
+
+        let artistName;
+        let trackName;
+        // unterdrückt submit und baut eigenen
+        $("#submit").click(function (e) { 
+            e.preventDefault();
+            console.log(e.type);
+            artistName=$("#interpret").value;
+            trackName=$("#track").value;
+            socket.emit('search',{artistName:artistName,trackName:trackName});
+         
+            
+        });
     });
 
     $("#playList").click(function (e) {
@@ -131,9 +145,7 @@ $(document).ready(function () {
     }
    
  
-    //socket.io verbindung
 
-    let socket = io();
     //event wird serverseitig ausgelöst, wenn sich der client verbindet
     socket.on('playListUpdate',(msg)=>{
        //console.log('playListUpdate '+JSON.stringify(msg));
@@ -145,16 +157,6 @@ $(document).ready(function () {
     let id='1301WleyT98MSxVHPZCA6M';
     //socket.emit('addTrack',{trackId:id});
     //nach artistName, trackName oder beidem suchen
-    let artistName;
-    let trackName;
-    // unterdrückt submit und baut eigenen
-    $("#submit").click(function (e) { 
-        console.log(e.type);
-        artistName=$("#interpret").innerHTML;
-        trackName=$("#track").innerHTML;
-        socket.emit('search',{artistName:artistName,trackName:trackName});
-        e.preventDefault();
-        
-    });
+
     /////
 });
