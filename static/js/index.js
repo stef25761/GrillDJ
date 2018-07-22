@@ -27,9 +27,7 @@ $(document).ready(function () {
         let divWishList= document.createElement("div");
         divWishList.setAttribute("class",cTC);
 
-        let form = document.createElement("form");
-        form.setAttribute("method","GET");
-        form.setAttribute("class","form-horizontal");
+       
 //----------------------------------------------------------
 // interpret elements
         let interpretDiv = document.createElement("div");
@@ -57,16 +55,16 @@ $(document).ready(function () {
         let submitButtonDiv= document.createElement("div");
         submitButtonDiv.setAttribute("class","col-sm-offset-2 col-sm-10");
         let button = document.createElement("Button");
-        button.setAttribute("type","submit");
+        button.setAttribute("type","button");
         button.setAttribute("class","btn btn-default");
         button.setAttribute("id","submit");
         button.innerText="submit";
         submitButtonDiv.append(button);
         submitDiv.append(submitButtonDiv);
-        form.append(interpretDiv);
-        form.append(trackDiv);
-        form.append(submitDiv);
-        $("#fs").append(form);
+        divWishList.append(interpretDiv);
+        divWishList.append(trackDiv);
+        divWishList.append(submitDiv);
+        $("#fs").append(divWishList);
         
     });
 
@@ -150,12 +148,13 @@ $(document).ready(function () {
     let artistName;
     let trackName;
     // unterdrückt submit und baut eigenen
-    $("#submit").submit(function (e) { 
+    $("#submit").click(function (e) { 
         console.log(e.type);
         artistName=$("#interpret").innerHTML;
         trackName=$("#track").innerHTML;
         socket.emit('search',{artistName:artistName,trackName:trackName});
         e.preventDefault();
-    });  
+        
+    });
     /////
 });
