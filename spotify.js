@@ -5,10 +5,10 @@ const SpotifyWebApi = require('spotify-web-api-node');
 class spotify {
 
     constructor() {
-        this._userName = 'freakykeyboard1';
-        this._playlistId = '0qsC4OhzUeGUXckcZ1VQl8';
+
+        this._playlistId = '2i7NbODEswbn83cfLU4fzW';
         let redirect_uri = 'http://fs-inf-fl.berndlorenzen.de/sucess';
-        this._acessToken = 'BQDOEmx8fBGIDOSoIaN2L0AVe4Ybj4X4f-WPKMBS7y2FGGIp3Kq0VV4z0v7WV28G42vEsb_JaTyp_i6ZK13Xk_vcFM899dmCGWuHFLJUS0krcrevDVrTeFDpTnDv3yC8S-j15yUJ6Vf3NPoPClvCPe4rghibIFKMLPTcwHRxdIKPY91WFWpmCPKv2fuOBvYwko2ZWiFlVO7hNObsI1DPbfHn2k8fw2SfkNtIPz-o_Rz_85wahP0w3Jh3yntLgtgKBRAnN4FKA4LJ-fmJHsg';
+        this._acessToken = '';
         this._spotifyApi = new SpotifyWebApi(
             {
                 redirect_uri: redirect_uri,
@@ -17,6 +17,9 @@ class spotify {
             });
 
 
+    }
+    setUserName(name){
+        this._userName = name;
     }
 
     refreshToken() {

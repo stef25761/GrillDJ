@@ -59,6 +59,7 @@ app.get('/sucess',(req,res)=>{
 
             // use the access token to access the Spotify Web API
             request.get(options, function (error, response, body) {
+                spotify.setUserName(body.id);
                 console.log(body);
             });
             spotify.refreshToken();
