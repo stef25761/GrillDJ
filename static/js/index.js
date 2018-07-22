@@ -144,8 +144,8 @@ $(document).ready(function () {
     let id='1301WleyT98MSxVHPZCA6M';
     //socket.emit('addTrack',{trackId:id});
     //nach artistName, trackName oder beidem suchen
-    let artistName="Slipknot";
-    let trackName="Wait and Bleed";
+    let artistName=$("#interpret").innerHTML;
+    let trackName=$("#track").innerHTML;
     socket.emit('search',{artistName:artistName,trackName:trackName})
     /////
 });
