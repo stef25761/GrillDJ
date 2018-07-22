@@ -28,7 +28,7 @@ $(document).ready(function () {
         divWishList.setAttribute("class",cTC);
 
         let form = document.createElement("form");
-        form.setAttribute("method","post");
+        form.setAttribute("method","GET");
         form.setAttribute("class","form-horizontal");
 //----------------------------------------------------------
 // interpret elements
@@ -151,10 +151,11 @@ $(document).ready(function () {
     let trackName;
     // unterdrückt submit und baut eigenen
     $("#submit").submit(function (e) { 
-        e.preventDefault();
+        console.log(e.type);
         artistName=$("#interpret").innerHTML;
         trackName=$("#track").innerHTML;
-        socket.emit('search',{artistName:artistName,trackName:trackName})
+        socket.emit('search',{artistName:artistName,trackName:trackName});
+        e.preventDefault();
     });  
     /////
 });
