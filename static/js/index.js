@@ -59,6 +59,7 @@ $(document).ready(function () {
         let button = document.createElement("Button");
         button.setAttribute("type","submit");
         button.setAttribute("class","btn btn-default");
+        button.setAttribute("id","submit");
         button.innerText="submit";
         submitButtonDiv.append(button);
         submitDiv.append(submitButtonDiv);
@@ -130,6 +131,8 @@ $(document).ready(function () {
         div.innerText = innerHTML;
         appendDiv.append(div);
     }
+   
+ 
     //socket.io verbindung
 
     let socket = io();
@@ -144,8 +147,14 @@ $(document).ready(function () {
     let id='1301WleyT98MSxVHPZCA6M';
     //socket.emit('addTrack',{trackId:id});
     //nach artistName, trackName oder beidem suchen
-    let artistName=$("#interpret").innerHTML;
-    let trackName=$("#track").innerHTML;
-    socket.emit('search',{artistName:artistName,trackName:trackName})
+    let artistName;
+    let trackName;
+    // unterdrückt submit und baut eigenen
+    $("#submit").submit(function (e) { 
+        e.preventDefault();
+        artistName=$("#interpret").innerHTML;
+        trackName=$("#track").innerHTML;
+        socket.emit('search',{artistName:artistName,trackName:trackName})
+    });  
     /////
 });
