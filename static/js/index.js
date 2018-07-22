@@ -11,6 +11,10 @@ $(document).ready(function () {
     let nextSongs=3;
     //socket.io verbindung
     let socket = io();
+    let artistName;
+    let trackName;
+    let searchLimit=3;
+    let artistsNameArr=[];
     $("#home").click(function (e) { 
       $("#fs").empty();
       let h3= document.createElement("h3");
@@ -28,8 +32,8 @@ $(document).ready(function () {
         $("#fs").empty();
         let divWishList= document.createElement("div");
         divWishList.setAttribute("class",cTC);
-
-       
+        let liveSearchDiv=document.createElement("div");
+       liveSearchDiv.setAttribute("id","liveSearchDiv");
 //----------------------------------------------------------
 // interpret elements
         let interpretDiv = document.createElement("div");
@@ -40,7 +44,7 @@ $(document).ready(function () {
         let interpretenInputDiv = document.createElement("div");
         interpretenInputDiv.setAttribute("class",colSM);
 
-        createInput("text","Track","interpret","Interpret",formControll,interpretenInputDiv);
+        createInput("text","Interpret","interpret","Interpret",formControll,interpretenInputDiv);
         interpretDiv.append(interpretenInputDiv);
 //-------------------------------------------------------------------
 //track elements
@@ -64,22 +68,30 @@ $(document).ready(function () {
         submitButtonDiv.append(button);
         submitDiv.append(submitButtonDiv);
         divWishList.append(interpretDiv);
+        divWishList.append(liveSearchDiv);
         divWishList.append(trackDiv);
         divWishList.append(submitDiv);
         $("#fs").append(divWishList);
-
-        let artistName;
-        let trackName;
         // unterdrückt submit und baut eigenen
         $("#submit").click(function (e) { 
             e.preventDefault();
-            console.log(e.type);
-            artistName=$("#interpret").value;
-            trackName=$("#track").value;
+            artistName=$("#interpret").val();
+            trackName=$("#track").val();
+            console.log(artistName,trackName);
+            // TODO:hier müsste dann dei Add Methode rein und nicht mehr die search!
             socket.emit('search',{artistName:artistName,trackName:trackName});
-         
-            
         });
+
+        $("#interpret").keyup(function (e) { 
+            //Limit muss hinzugefügt werden,
+            socket.emit('search',{artistName:e.target.value,trackName:undefined /*,searchLimit*/});
+            if (artistsNameArr!= null) {
+                for (let artistName in artistsNameArr) {
+                    $("#liveSearchDiv").innerHTML = artistName;
+                }
+            }
+        });
+    
     });
 
     $("#playList").click(function (e) {
@@ -150,13 +162,16 @@ $(document).ready(function () {
     socket.on('playListUpdate',(msg)=>{
        //console.log('playListUpdate '+JSON.stringify(msg));
     });
-    socket.on('searchData',(msg)=>{
-       console.log('searchData '+JSON.stringify(msg));
-    });
+  
     //track hinzufügen
     let id='1301WleyT98MSxVHPZCA6M';
     //socket.emit('addTrack',{trackId:id});
     //nach artistName, trackName oder beidem suchen
-
+    socket.on('searchData',(msg)=>{
+        console.log('searchData '+JSON.stringify(msg));
+        for (var artist  in msg.artists.name) {
+          artistsNameArr[artist];
+        }
+     });
     /////
 });
