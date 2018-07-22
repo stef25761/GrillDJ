@@ -133,6 +133,7 @@ $(document).ready(function () {
     //socket.io verbindung
 
     let socket = io();
+
     //event wird serverseitig ausgelöst, wenn sich der client verbindet
     socket.on('playListUpdate',(msg)=>{
        //console.log('playListUpdate '+JSON.stringify(msg));
