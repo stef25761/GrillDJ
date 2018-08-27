@@ -14,10 +14,10 @@ $(document).ready(function () {
     let artistName;
     let trackName;
     let searchLimit=3;
-    let artistsNameArr=[];
+    let artistsNameArr= Array.from(artistNameSet);
     let tracksArr=[];
-    let artistNameSet = new Set(artistsNameArr);
-    let trackNameSet = new Set(tracksArr);
+    let artistNameSet = new Set();
+    let trackNameSet = new Set();
     $("#home").click(function (e) { 
       $("#fs").empty();
       let h3= document.createElement("h3");
@@ -99,7 +99,7 @@ $(document).ready(function () {
         });
         $("#interpret").autocomplete(
             {
-                source: artistNameSet
+                source: artistsNameArr
             }
         );
         $("#track").autocomplete(
@@ -189,7 +189,7 @@ $(document).ready(function () {
           //artistsNameArr.push();
          //console.log('items: '+element.artists[0].name);
           for (let artist in element.artists){
-              artistsNameArr.push(element.artists[artist].name);
+              artistNameSet.add(element.artists[artist].name);
              // console.log(element.artists[artist].name);
           }
         }
