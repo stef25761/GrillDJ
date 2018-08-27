@@ -85,14 +85,14 @@ class spotify {
             this._spotifyApi.searchTracks('track:' + data.trackName + ' artist:' + data.artistName)
                 .catch(function (error){
                 
-            }
+            })
             
                 .then(function (data) {
 
                     callback(data);
                 }, function (err) {
 
-                }));
+                });
         } else {
             this._spotifyApi.searchTracks('track:' + data.trackName);
         }
