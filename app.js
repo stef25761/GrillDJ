@@ -64,8 +64,8 @@ app.get('/sucess',(req,res)=>{
                 console.log(body);
             });
             spotify.refreshToken();
-
-
+            res.send('sucess');
+//ToDo send something to server stupid
 
 
 
