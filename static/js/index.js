@@ -80,6 +80,8 @@ $(document).ready(function () {
             trackName=$("#track").val();
             //console.log(artistName,trackName);
             // TODO:hier müsste dann dei Add Methode rein und nicht mehr die search!
+            artistsNameArr.length = 0;
+            tracksArr.length = 0;
             socket.emit('search',{artistName:artistName,trackName:trackName});
         });
 
@@ -189,9 +191,7 @@ $(document).ready(function () {
              // console.log(element.artists[artist].name);
           }
         }
-        for (let a in artistsNameArr){
-            console.log(artistsNameArr[a]);
-        }
+        
      });
     /////
 });
