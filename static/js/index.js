@@ -77,7 +77,7 @@ $(document).ready(function () {
             e.preventDefault();
             artistName=$("#interpret").val();
             trackName=$("#track").val();
-            console.log(artistName,trackName);
+            //console.log(artistName,trackName);
             // TODO:hier müsste dann dei Add Methode rein und nicht mehr die search!
             socket.emit('search',{artistName:artistName,trackName:trackName});
         });
@@ -168,10 +168,18 @@ $(document).ready(function () {
     //socket.emit('addTrack',{trackId:id});
     //nach artistName, trackName oder beidem suchen
     socket.on('searchData',(msg)=>{
-        console.log('searchData '+JSON.stringify(msg));
-        for (var artist  in msg.artists.name) {
-          artistsNameArr[artist];
-          console.log(artist);
+        console.log(msg);
+        for (let item  in msg.body.tracks.items) {
+            let element=msg.body.tracks.items[item];
+          //artistsNameArr.push();
+         //console.log('items: '+element.artists[0].name);
+          for (let artist in element.artists){
+              artistsNameArr.push(element.artists[artist].name);
+             // console.log(element.artists[artist].name);
+          }
+        }
+        for (let a in artistsNameArr){
+            console.log(artistsNameArr[a]);
         }
      });
     /////

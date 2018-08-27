@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "dependencies": {
     "express": "4.16.3",
+    "express-delay": "0.2.0",
     "node-spotify-api": "1.0.7",
     "querystring": "0.2.0",
     "request": "2.87.0",

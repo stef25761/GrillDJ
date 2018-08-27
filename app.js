@@ -7,6 +7,7 @@ const app = express();
 const server = require('http').createServer(app);
 const path=require('path');
 const url = require('url');
+const delay=require('express-delay');
 
 const websocket=require(path.join(__dirname,path.sep,'websocket')).getWsInstance();
 const spotify=require(path.join(__dirname,path.sep,'spotify')).spotify();
@@ -64,8 +65,10 @@ app.get('/sucess',(req,res)=>{
             });
             spotify.refreshToken();
 
-            //
-            res.send('suceess');
+
+            //app.use(delay(1000));
+
+            res.redirect('index')
         }
 });
 });
