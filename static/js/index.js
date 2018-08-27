@@ -171,6 +171,7 @@ $(document).ready(function () {
         console.log('searchData '+JSON.stringify(msg));
         for (var artist  in msg.artists.name) {
           artistsNameArr[artist];
+          console.log(artist);
         }
      });
     /////
