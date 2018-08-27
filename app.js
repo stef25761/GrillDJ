@@ -66,9 +66,9 @@ app.get('/sucess',(req,res)=>{
             spotify.refreshToken();
 
 
-            //app.use(delay(1000));
 
-            res.redirect('index')
+
+
         }
 });
 });

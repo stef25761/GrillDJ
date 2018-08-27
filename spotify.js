@@ -92,7 +92,7 @@ class spotify {
                     callback(data);
                 }, function (err) {
 
-                });
+                }));
         } else {
             this._spotifyApi.searchTracks('track:' + data.trackName);
         }
