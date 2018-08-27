@@ -24,8 +24,11 @@ class spotify {
 
     refreshToken() {
         // clientId, clientSecret and refreshToken has been set on the api object previous to this call.
-        this._spotifyApi.refreshAccessToken().then(
-            function (data) {
+        this._spotifyApi.refreshAccessToken()
+            .catch(function (error) {
+                
+            })
+            .then(function (data) {
                 console.log('The access token has been refreshed!');
 
                 // Save the access token so that it's used in future calls
@@ -41,6 +44,9 @@ class spotify {
     addTrack(data, callback) {
         //console.log('freakykeaboard1','0qsC4OhzUeGUXckcZ1VQl8',["spotify:track"+data.trackId]);
         this._spotifyApi.addTracksToPlaylist('freakykeyboard1','0qsC4OhzUeGUXckcZ1VQl8',["spotify:track:2d0hyoQ5ynDBnkvAbJKORj"])
+            .catch(function (error) {
+                
+            })
             .then(function (data) {
                 //ist in den data die geänderte Playlist enthalten?
 
@@ -63,6 +69,9 @@ class spotify {
         if (data.artistName && !data.trackName) {
             // Search tracks whose artist's name contains the given artistName
             this._spotifyApi.searchTracks('artist:' + data.artistName,{limit:3,offset:3})
+                .catch(function (error) {
+                    
+                })
                 .then(function (data) {
 
                     callback(data);
@@ -74,6 +83,10 @@ class spotify {
         } else if (data.artistName && data.trackName) {
             // Search tracks whose artist's name contains the given artist and trackName
             this._spotifyApi.searchTracks('track:' + data.trackName + ' artist:' + data.artistName)
+                .catch(function (error){
+                
+            }
+            
                 .then(function (data) {
 
                     callback(data);
@@ -89,6 +102,9 @@ class spotify {
 
     getPlayList(callback) {
         this._spotifyApi.getPlaylistTracks(this._userName, this._playlistId)
+            .catch(function (error) {
+                
+            })
             .then(function (data) {
 
                 callback(data);
