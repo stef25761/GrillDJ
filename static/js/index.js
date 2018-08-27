@@ -15,6 +15,7 @@ $(document).ready(function () {
     let trackName;
     let searchLimit=3;
     let artistsNameArr=[];
+    let tracksArr=[];
     $("#home").click(function (e) { 
       $("#fs").empty();
       let h3= document.createElement("h3");
@@ -83,15 +84,25 @@ $(document).ready(function () {
         });
 
         $("#interpret").keyup(function (e) { 
-            //Limit muss hinzugefügt werden,
-            socket.emit('search',{artistName:e.target.value,trackName:undefined /*,searchLimit*/});
-            if (artistsNameArr!= null) {
-                for (let artistName in artistsNameArr) {
-                    $("#liveSearchDiv").innerHTML = artistName;
-                }
-            }
+           
+            socket.emit('search',{artistName:e.target.value,trackName:undefined });
+            
+            
         });
-    
+        $("#track").keyup(function (e) { 
+            socket.emit('search',{artistName:undefined,trackName:e.target.value});
+           
+        });
+        $("#interpret").autocomplete(
+            {
+                source: artistsNameArr
+            }
+        );
+        $("#track").autocomplete(
+            {
+                source: tracksArr
+            }
+        );
     });
 
     $("#playList").click(function (e) {
