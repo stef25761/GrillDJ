@@ -16,6 +16,8 @@ $(document).ready(function () {
     let searchLimit=3;
     let artistsNameArr=[];
     let tracksArr=[];
+    let artistNameSet = new Set(artistsNameArr);
+    let trackNameSet = new Set(tracksArr);
     $("#home").click(function (e) { 
       $("#fs").empty();
       let h3= document.createElement("h3");
@@ -97,7 +99,7 @@ $(document).ready(function () {
         });
         $("#interpret").autocomplete(
             {
-                source: artistsNameArr
+                source: artistNameSet
             }
         );
         $("#track").autocomplete(
