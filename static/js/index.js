@@ -185,7 +185,7 @@ $(document).ready(function () {
     //nach artistName, trackName oder beidem suchen
     socket.on('artistData',(msg)=>{
         console.log(msg);
-        for (let item  in msg.body.artist.items) {
+        for (let item  in msg.body.artists.items) {
             let element=msg.body.tracks.items[item];
             artistNameSet.add(element.name);
         }
