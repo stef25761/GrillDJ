@@ -32,16 +32,25 @@ class websocket {
 
                 });
             });
-            socket.on('search',(data)=>{
+            socket.on('searchArtist',(data)=>{
                 console.log('search '+JSON.stringify(data));
                spotify.searchTracks(data,(data)=>{
                    if (data.statusCode===200){
-                       socket.emit('searchData',(data));
+                       socket.emit('artistData',(data));
                    }else if (data.statusCode===401){
                        spotify.refreshToken();
-                       socket.emit('searchData',(data));
+                       socket.emit('artistData',(data));
                    }
 
+                });
+            });
+            socket.on('searchTrack',(data)=>{
+                spotify.searchTracks(data,(data)=>{
+                    if (data.statusCode===200){
+                        socket.emit('trackData',(data));
+                    } else if (data.statusCode===401){
+                        spotify.refreshToken();
+                    }
                 });
             });
 

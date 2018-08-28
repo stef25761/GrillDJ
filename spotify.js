@@ -66,23 +66,9 @@ class spotify {
 
     searchTracks(data, callback) {
 
-        if (data.artistName && !data.trackName) {
-            // Search tracks whose artist's name contains the given artistName
-            this._spotifyApi.searchTracks('artist:' + data.artistName,{limit:3,offset:3})
-                .catch(function (error) {
-                    
-                })
-                .then(function (data) {
 
-                    callback(data);
-                }, function (err) {
-                    console.log('Something went wrong!', err);
-                    throw new Error(err);
-                });
-
-        } else if (data.artistName && data.trackName) {
             // Search tracks whose artist's name contains the given artist and trackName
-            this._spotifyApi.searchTracks('track:' + data.trackName + ' artist:' + data.artistName)
+            this._spotifyApi.searchTracks('track:' + data.trackName)
                 .catch(function (error){
                 
             })
@@ -93,9 +79,24 @@ class spotify {
                 }, function (err) {
 
                 });
-        } else {
-            this._spotifyApi.searchTracks('track:' + data.trackName);
-        }
+
+
+
+    }
+    searchArtist(data,callback){
+
+            // Search tracks whose artist's name contains the given artistName
+            this._spotifyApi.searchArtists(data.artistName,{limit:3,offset:3})
+                .catch(function (error) {
+
+                })
+                .then(function (data) {
+
+                    callback(data);
+                }, function (err) {
+                    console.log('Something went wrong!', err);
+                    throw new Error(err);
+                });
 
 
     }
