@@ -206,7 +206,7 @@ $(document).ready(function () {
          
      });
      for(let item in artistsNameArr){
-         console.log(artistsNameArr[item]);
+         console.log("Item:"+artistsNameArr[item]);
      }
     /////
 });
