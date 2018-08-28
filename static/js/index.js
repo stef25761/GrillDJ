@@ -189,8 +189,8 @@ $(document).ready(function () {
             let element=msg.body.artists.items[item];
            // console.log("Artist Name: "+element.name);
             artistNameSet.add(element.name);
-            artistNameSet.size;
-            artistsNameArr=Array.from(artistNameSet);
+            artistsNameArr=[...artistNameSet];
+            console.log(artistsNameArr.length());
         }
         
      });
@@ -203,12 +203,5 @@ $(document).ready(function () {
          }
          
      });
-     for(let x in artistsNameArr){
-        console.log("Name: "+ x);
-     }
-     for(let x of artistNameSet){
-         console.log(x);
-     }
-
     /////
 });
