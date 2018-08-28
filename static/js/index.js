@@ -187,14 +187,14 @@ $(document).ready(function () {
        // console.log(msg);
         for (let item  in msg.body.artists.items) {
             let element=msg.body.artists.items[item];
-            console.log("Artist Name: "+element.name);
+           // console.log("Artist Name: "+element.name);
             artistNameSet.add(element.name);
             artistsNameArr=Array.from(artistNameSet);
         }
         
      });
      socket.on('trackData',(msg)=>{
-         console.log(msg);
+         
          for(let item in  msg.body.tracks.items){
             let element = msg.body.tracks.items[item];
             trackNameSet.add(element.name);
@@ -202,5 +202,12 @@ $(document).ready(function () {
          }
          
      });
+     for(let x in artistsNameArr){
+        console.log("Name: "+ x);
+     }
+     for(let x of artistNameSet){
+         console.log(x);
+     }
+
     /////
 });
