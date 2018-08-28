@@ -186,7 +186,7 @@ $(document).ready(function () {
     socket.on('artistData',(msg)=>{
         console.log(msg);
         for (let item  in msg.body.artists.items) {
-            let element=msg.body.tracks.items[item];
+            let element=msg.body.artists.items[item];
             artistNameSet.add(element.name);
         }
         
