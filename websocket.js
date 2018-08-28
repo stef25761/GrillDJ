@@ -34,7 +34,7 @@ class websocket {
             });
             socket.on('searchArtist',(data)=>{
                 console.log('search '+JSON.stringify(data));
-               spotify.searchTracks(data,(data)=>{
+               spotify.searchArtist(data,(data)=>{
                    if (data.statusCode===200){
                        socket.emit('artistData',(data));
                    }else if (data.statusCode===401){
