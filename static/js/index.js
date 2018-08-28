@@ -85,17 +85,17 @@ $(document).ready(function () {
             // TODO:hier müsste dann dei Add Methode rein und nicht mehr die search!
             artistsNameArr.length = 0;
             tracksArr.length = 0;
-            socket.emit('search',{artistName:artistName,trackName:trackName});
+            socket.emit('addTrack',{artistName:artistName,trackName:trackName});
         });
 
         $("#interpret").keyup(function (e) { 
            
-            socket.emit('search',{artistName:e.target.value,trackName:undefined });
+            socket.emit('searchArtist',{artistName:e.target.value});
             
             
         });
         $("#track").keyup(function (e) { 
-            socket.emit('search',{artistName:undefined,trackName:e.target.value});
+            socket.emit('searchTrack',{trackName:e.target.value});
            
         });
         $("#interpret").autocomplete(
