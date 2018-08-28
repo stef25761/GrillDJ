@@ -91,7 +91,7 @@ $(document).ready(function () {
         $("#interpret").keyup(function (e) { 
            
             socket.emit('searchArtist',{artistName:e.target.value});
-            console.log(artistsNameArr.length);
+            
             
         });
         $("#track").keyup(function (e) { 
@@ -205,5 +205,8 @@ $(document).ready(function () {
          }
          
      });
+     for(let item in artistsNameArr){
+         console.log(artistsNameArr[item]);
+     }
     /////
 });
