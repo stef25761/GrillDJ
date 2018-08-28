@@ -68,7 +68,7 @@ class spotify {
 
         if (data.artistName && !data.trackName) {
             // Search tracks whose artist's name contains the given artistName
-            this._spotifyApi.searchTracks('artist:' + data.artistName,{limit:3,offset:3})
+            this._spotifyApi.searchArtists(data.artistName,{limit:3,offset:3})
                 .catch(function (error) {
                     
                 })
