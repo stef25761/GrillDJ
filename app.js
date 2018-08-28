@@ -64,9 +64,11 @@ app.get('/sucess',(req,res)=>{
                 console.log(body);
             });
             spotify.refreshToken();
-            res.sendFile(path.join(__dirname,path.sep,'static',path.sep,'sucess.html'));
-            res.send(body);
-//ToDo send something to server stupid
+            res.writeHead(200, {'Content-Type': 'text/html'});
+            res.write('<p>sucess</p>');
+            res.write('<button>weiter zu index</button>');
+            res.write(body);
+
 
 
 
