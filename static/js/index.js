@@ -91,7 +91,7 @@ $(document).ready(function () {
         $("#interpret").keyup(function (e) { 
            
             socket.emit('searchArtist',{artistName:e.target.value});
-            
+            console.log(artistsNameArr.length);
             
         });
         $("#track").keyup(function (e) { 
@@ -101,7 +101,9 @@ $(document).ready(function () {
         $("#interpret").autocomplete(
             {
                 source: artistsNameArr
+                
             }
+            
         );
         $("#track").autocomplete(
             {
@@ -190,7 +192,7 @@ $(document).ready(function () {
            // console.log("Artist Name: "+element.name);
             artistNameSet.add(element.name);
             artistsNameArr=[...artistNameSet];
-            console.log(artistsNameArr.length);
+           // console.log(artistsNameArr.length);
         }
         
      });
