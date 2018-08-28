@@ -189,6 +189,7 @@ $(document).ready(function () {
             let element=msg.body.artists.items[item];
            // console.log("Artist Name: "+element.name);
             artistNameSet.add(element.name);
+            artistNameSet.size;
             artistsNameArr=Array.from(artistNameSet);
         }
         
