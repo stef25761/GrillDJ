@@ -14,10 +14,11 @@ $(document).ready(function () {
     let artistName;
     let trackName;
     let searchLimit=3;
-    let artistsNameArr= Array.from(artistNameSet);
-    let tracksArr=[];
+
     let artistNameSet = new Set();
     let trackNameSet = new Set();
+    let artistsNameArr= Array.from(artistNameSet);
+    let tracksArr=[];
     $("#home").click(function (e) { 
       $("#fs").empty();
       let h3= document.createElement("h3");
