@@ -16,8 +16,8 @@ $(document).ready(function () {
     let searchLimit=3;
     let artistNameSet = new Set();
     let trackNameSet = new Set();
-    let artistsNameArr= Array.from(artistNameSet);
-    let tracksArr=Array.from(trackNameSet);
+    let artistsNameArr=[];
+    let tracksArr=[];
   
     $("#home").click(function (e) { 
       $("#fs").empty();
@@ -184,19 +184,23 @@ $(document).ready(function () {
     //socket.emit('addTrack',{trackId:id});
     //nach artistName, trackName oder beidem suchen
     socket.on('artistData',(msg)=>{
-        console.log(msg);
+       // console.log(msg);
         for (let item  in msg.body.artists.items) {
             let element=msg.body.artists.items[item];
+            console.log("Artist Name: "+element.name);
             artistNameSet.add(element.name);
+            artistsNameArr=Array.from(artistNameSet);
         }
         
      });
      socket.on('trackData',(msg)=>{
          console.log(msg);
-         /*for(let item in  msg.body.tracks.items){
-
+         for(let item in  msg.body.tracks.items){
+            let element = msg.body.tracks.items[item];
+            trackNameSet.add(element.name);
+            tracksArr = Array.from(trackNameSet);
          }
-         */
+         
      });
     /////
 });
