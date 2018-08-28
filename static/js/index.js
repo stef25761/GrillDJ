@@ -190,7 +190,7 @@ $(document).ready(function () {
            // console.log("Artist Name: "+element.name);
             artistNameSet.add(element.name);
             artistsNameArr=[...artistNameSet];
-            console.log(artistsNameArr.length());
+            console.log(artistsNameArr.length);
         }
         
      });
