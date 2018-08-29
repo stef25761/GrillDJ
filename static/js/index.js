@@ -93,25 +93,25 @@ $(document).ready(function () {
             socket.emit('searchArtist', { artistName: e.target.value });
 
             //console.log("Item:"+artistsNameArr[0]);
-
+            $("#interpret").autocomplete(
+                {
+                    source: artistsNameArr
+    
+                }
+    
+            );
 
         });
         $("#track").keyup(function (e) {
             socket.emit('searchTrack', { trackName: e.target.value });
 
+            $("#track").autocomplete(
+                {
+                    source: tracksArr
+                }
+            );
         });
-        $("#interpret").autocomplete(
-            {
-                source: artistsNameArr
-
-            }
-
-        );
-        $("#track").autocomplete(
-            {
-                source: tracksArr
-            }
-        );
+      
     });
 
     $("#playList").click(function (e) {
