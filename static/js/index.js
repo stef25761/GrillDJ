@@ -92,7 +92,7 @@ $(document).ready(function () {
            
             socket.emit('searchArtist',{artistName:e.target.value});
             
-            console.log("Item:"+artistsNameArr[0]);
+            console.log(artistsNameArr);
             
             
         });
@@ -192,8 +192,13 @@ $(document).ready(function () {
         for (let item  in msg.body.artists.items) {
             let element=msg.body.artists.items[item];
            // console.log("Artist Name: "+element.name);
-            artistNameSet.add(element.name);
-            artistsNameArr=[...artistNameSet];
+           //artistNameSet.add(element.name);
+          if(!(artistsNameArr.includes(element.name)){
+                artistsNameArr.push(element.name);
+            }
+
+                
+           }
            // console.log(artistsNameArr.length);
         }
         
