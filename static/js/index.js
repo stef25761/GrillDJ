@@ -75,6 +75,17 @@ $(document).ready(function () {
         submitDiv.append(submitButtonDiv);
         */
         let resultDiv = document.createElement("div");
+        for (let i = 0; i < artistsNameArr.length; i++) {
+            let p=document.createElement("p");
+            p.setAttribute("class","artistName");
+            let name = document.createTextNode(artistsNameArr[i]);
+            p.appendChild(name);
+            $(".artistName").click(function (e) { 
+                alert("Gedrückt");
+                // add playlist
+            });
+            resultDiv.appendChild(p);
+        }
         resultDiv.setAttribute("id","resultDiv");
         divWishList.append(resultDiv);
         divWishList.append(interpretDiv);
@@ -83,16 +94,7 @@ $(document).ready(function () {
         //divWishList.append(submitDiv);
         $("#fs").append(divWishList);
         // unterdrückt submit und baut eigenen
-       for (let i = 0; i < artistsNameArr.length; i++) {
-           let p=document.createElement("p");
-           p.setAttribute("class","artistName");
-           let name = document.createTextNode(artistsNameArr[i]);
-           p.appendChild(name);
-           $(".artistName").click(function (e) { 
-               alert("Gedrückt");
-               // add playlist
-           });
-       }
+      
         $("#submit").click(function (e) {
             e.preventDefault();
             artistName = $("#interpret").val();
