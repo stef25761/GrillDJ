@@ -59,7 +59,7 @@ $(document).ready(function () {
         trackInputDiv.setAttribute("class", colSM);
         createInput("text", "Track", "track", "Track", formControll, trackInputDiv);
         trackDiv.append(trackInputDiv);
-
+        /*
         let submitDiv = document.createElement("div");
         submitDiv.setAttribute("class", formGroup);
         let submitButtonDiv = document.createElement("div");
@@ -68,15 +68,31 @@ $(document).ready(function () {
         button.setAttribute("type", "button");
         button.setAttribute("class", "btn btn-default");
         button.setAttribute("id", "submit");
-        button.innerText = "submit";
+        button.innerText = "suchen";
+        
         submitButtonDiv.append(button);
+        
         submitDiv.append(submitButtonDiv);
+        */
+        let resultDiv = document.createElement("div");
+        resultDiv.setAttribute("id","resultDiv");
+        divWishList.append(resultDiv);
         divWishList.append(interpretDiv);
         divWishList.append(liveSearchDiv);
         divWishList.append(trackDiv);
         divWishList.append(submitDiv);
         $("#fs").append(divWishList);
         // unterdrückt submit und baut eigenen
+       for (let i = 0; i < artistsNameArr.length; i++) {
+           let p=document.createElement("p");
+           p.setAttribute("class","artistName");
+           let name = document.createTextNode(artistsNameArr[i]);
+           p.appendChild(name);
+           $(".artistName").click(function (e) { 
+               alert("Gedrückt");
+               // add playlist
+           });
+       }
         $("#submit").click(function (e) {
             e.preventDefault();
             artistName = $("#interpret").val();
@@ -96,9 +112,9 @@ $(document).ready(function () {
             $("#interpret").autocomplete(
                 {
                     source: artistsNameArr
-    
+
                 }
-    
+
             );
 
         });
@@ -111,7 +127,7 @@ $(document).ready(function () {
                 }
             );
         });
-      
+
     });
 
     $("#playList").click(function (e) {
@@ -188,7 +204,8 @@ $(document).ready(function () {
     //socket.emit('addTrack',{trackId:id});
     //nach artistName, trackName oder beidem suchen
     socket.on('artistData', (msg) => {
-        // console.log(msg);
+        
+         console.log(msg,"artistName");
         for (let item in msg.body.artists.items) {
             let element = msg.body.artists.items[item];
             // console.log("Artist Name: "+element.name);
@@ -203,11 +220,13 @@ $(document).ready(function () {
 
     });
     socket.on('trackData', (msg) => {
-
+        console.log("trackNAme");
+        console.log(msg);
         for (let item in msg.body.tracks.items) {
             let element = msg.body.tracks.items[item];
             if (!(tracksArr.includes(element.name))) {
                 tracksArr.push(element.name);
+
             }
 
         }
