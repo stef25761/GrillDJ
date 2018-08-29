@@ -65,9 +65,10 @@ app.get('/sucess',(req,res)=>{
             });
             spotify.refreshToken();
             res.writeHead(200, {'Content-Type': 'text/html'});
+
             res.write('<p>sucess</p>');
-            res.write('<button>weiter zu index</button>');
-            res.write(body);
+            res.write('<button id="forward">weiter zu index</button>');
+            //res.write(body);
 
 
 
