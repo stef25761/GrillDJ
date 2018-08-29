@@ -86,7 +86,7 @@ class spotify {
     searchArtist(data,callback){
 
             // Search tracks whose artist's name contains the given artistName
-            this._spotifyApi.searchArtists(data.artistName,{limit:3,offset:3})
+            this._spotifyApi.searchArtists(data.artistName)
                 .catch(function (error) {
 
                 })
