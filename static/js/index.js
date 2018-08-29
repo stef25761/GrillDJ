@@ -80,7 +80,7 @@ $(document).ready(function () {
         divWishList.append(interpretDiv);
         divWishList.append(liveSearchDiv);
         divWishList.append(trackDiv);
-        divWishList.append(submitDiv);
+        //divWishList.append(submitDiv);
         $("#fs").append(divWishList);
         // unterdrückt submit und baut eigenen
        for (let i = 0; i < artistsNameArr.length; i++) {
