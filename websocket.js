@@ -32,7 +32,9 @@ class websocket {
 
                 });
             });
-            socket.on('searchArtist',(data)=>{
+            //ToDo delete
+            //no longer needed ?
+           /* socket.on('searchArtist',(data)=>{
                 console.log('search '+JSON.stringify(data));
                spotify.searchArtist(data,(data)=>{
                    if (data.statusCode===200){
@@ -43,9 +45,12 @@ class websocket {
                    }
 
                 });
-            });
+            });*/
             socket.on('searchTrack',(data)=>{
+                console.log('websocket');
+                console.log(data);
                 spotify.searchTracks(data,(data)=>{
+
                     if (data.statusCode===200){
                         socket.emit('trackData',(data));
                     } else if (data.statusCode===401){

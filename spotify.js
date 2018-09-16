@@ -68,7 +68,7 @@ class spotify {
 
 
             // Search tracks whose artist's name contains the given artist and trackName
-            this._spotifyApi.searchTracks('track:' + data.trackName)
+            this._spotifyApi.searchTracks(data.keyWord)
                 .catch(function (error){
                 
             })
@@ -83,7 +83,9 @@ class spotify {
 
 
     }
-    searchArtist(data,callback){
+    //ToDo delete
+    /// no longer needed ?
+    /*searchArtist(data,callback){
 
             // Search tracks whose artist's name contains the given artistName
             this._spotifyApi.searchArtists(data.artistName)
@@ -99,7 +101,7 @@ class spotify {
                 });
 
 
-    }
+    }*/
 
     getPlayList(callback) {
         this._spotifyApi.getPlaylistTracks(this._userName, this._playlistId)

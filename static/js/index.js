@@ -1,4 +1,3 @@
-
 $(document).ready(function () {
     let cTC = "container text-center";
     let formGroup = "form-group";
@@ -18,7 +17,9 @@ $(document).ready(function () {
     let trackNameSet = new Set();
     let artistsNameArr = [];
     let tracksArr = [];
-
+    let divWishList = document.createElement("div");
+    let resultDiv = document.createElement("div");
+    resultDiv.setAttribute("id", "resultDiv");
     $("#home").click(function (e) {
         $("#fs").empty();
         let h3 = document.createElement("h3");
@@ -34,31 +35,25 @@ $(document).ready(function () {
     $("#wishList").click(function (e) {
 
         $("#fs").empty();
-        let divWishList = document.createElement("div");
+
         divWishList.setAttribute("class", cTC);
         let liveSearchDiv = document.createElement("div");
         liveSearchDiv.setAttribute("id", "liveSearchDiv");
         //----------------------------------------------------------
         // interpret elements
-        let interpretDiv = document.createElement("div");
-        interpretDiv.setAttribute("class", formGroup);
+        let searchDiv = document.createElement("div");
+        searchDiv.setAttribute("class", formGroup);
 
-        createLabl("interpret", controlLabel, "Interpret:", interpretDiv);
+        createLabl("Search", controlLabel, "Suche:", searchDiv);
 
-        let interpretenInputDiv = document.createElement("div");
-        interpretenInputDiv.setAttribute("class", colSM);
+        let searchInputDiv = document.createElement("div");
+        searchInputDiv.setAttribute("class", colSM);
 
-        createInput("text", "Interpret", "interpret", "Interpret", formControll, interpretenInputDiv);
-        interpretDiv.append(interpretenInputDiv);
+        createInput("text", "Search", "search", "Artist,Track", formControll, searchInputDiv);
+        searchDiv.append(searchInputDiv);
         //-------------------------------------------------------------------
-        //track elements
-        let trackDiv = document.createElement("div");
-        trackDiv.setAttribute("class", formGroup);
-        createLabl("track", controlLabel, "Track:", trackDiv);
-        let trackInputDiv = document.createElement("div");
-        trackInputDiv.setAttribute("class", colSM);
-        createInput("text", "Track", "track", "Track", formControll, trackInputDiv);
-        trackDiv.append(trackInputDiv);
+
+
         /*
         let submitDiv = document.createElement("div");
         submitDiv.setAttribute("class", formGroup);
@@ -74,27 +69,14 @@ $(document).ready(function () {
         
         submitDiv.append(submitButtonDiv);
         */
-        let resultDiv = document.createElement("div");
-        for (let i = 0; i < artistsNameArr.length; i++) {
-            let p=document.createElement("p");
-            p.setAttribute("class","artistName");
-            let name = document.createTextNode(artistsNameArr[i]);
-            p.appendChild(name);
-            $(".artistName").click(function (e) { 
-                alert("Gedrückt");
-                // add playlist
-            });
-            resultDiv.appendChild(p);
-        }
-        resultDiv.setAttribute("id","resultDiv");
-        divWishList.append(resultDiv);
-        divWishList.append(interpretDiv);
+
+        divWishList.append(searchDiv);
         divWishList.append(liveSearchDiv);
-        divWishList.append(trackDiv);
+
         //divWishList.append(submitDiv);
         $("#fs").append(divWishList);
         // unterdrückt submit und baut eigenen
-      
+
         $("#submit").click(function (e) {
             e.preventDefault();
             artistName = $("#interpret").val();
@@ -103,37 +85,28 @@ $(document).ready(function () {
             // TODO:hier müsste dann dei Add Methode rein und nicht mehr die search!
             artistsNameArr.length = 0;
             tracksArr.length = 0;
-            socket.emit('addTrack', { artistName: artistName, trackName: trackName });
+            socket.emit('addTrack', {artistName: artistName, trackName: trackName});
         });
 
-        $("#interpret").keyup(function (e) {
+        $("#search").keyup(function (e) {
 
-            socket.emit('searchArtist', { artistName: e.target.value });
+            socket.emit('searchTrack', {keyWord: e.target.value});
 
             //console.log("Item:"+artistsNameArr[0]);
-            $("#interpret").autocomplete(
+            $("#Search").autocomplete(
                 {
                     source: artistsNameArr
 
                 }
-
             );
 
         });
-        $("#track").keyup(function (e) {
-            socket.emit('searchTrack', { trackName: e.target.value });
 
-            $("#track").autocomplete(
-                {
-                    source: tracksArr
-                }
-            );
-        });
 
     });
 
     $("#playList").click(function (e) {
-        // clear only the mein div,fs, childs
+        // clear only the main div,fs, childs
         $("#fs").empty();
         let parrentDiv = document.createElement("div");
         parrentDiv.setAttribute("class", panelDefault);
@@ -170,6 +143,7 @@ $(document).ready(function () {
         appendDiv.append(label);
 
     }
+
     function createInput(typeTag, nameTag, idTag, playeholderTag, classTag, appendDiv) {
         let input = document.createElement("input");
         input.setAttribute("type", typeTag);
@@ -180,12 +154,14 @@ $(document).ready(function () {
         appendDiv.append(input);
 
     }
+
     function createHeaderDiv(classTag, innerHTML, appendDiv) {
         let headerDiv = document.createElement("div");
         headerDiv.setAttribute("class", classTag);
         headerDiv.innerText = innerHTML;
         appendDiv.append(headerDiv);
     }
+
     function createNextTrackDiv(classTag, idTag, innerHTML, appendDiv) {
         let div = document.createElement("div");
         div.setAttribute("class", classTag);
@@ -193,7 +169,6 @@ $(document).ready(function () {
         div.innerText = innerHTML;
         appendDiv.append(div);
     }
-
 
 
     //event wird serverseitig ausgelöst, wenn sich der client verbindet
@@ -206,8 +181,9 @@ $(document).ready(function () {
     //socket.emit('addTrack',{trackId:id});
     //nach artistName, trackName oder beidem suchen
     socket.on('artistData', (msg) => {
-        
-         console.log(msg,"artistName");
+
+        console.log(msg, "artistName");
+
         for (let item in msg.body.artists.items) {
             let element = msg.body.artists.items[item];
             // console.log("Artist Name: "+element.name);
@@ -215,25 +191,48 @@ $(document).ready(function () {
                 console.log("in if in artistData" + element.name);
                 artistsNameArr.push(element.name);
             }
-            //artistNameSet.add(element.name);
-            //artistsNameArr=[...artistNameSet];
-            // console.log(artistsNameArr.length);
         }
-
     });
     socket.on('trackData', (msg) => {
-        console.log("trackNAme");
-        console.log(msg);
+        artistsNameArr.length = 0;
+        //Todo remove console.log
+        console.log("track Response", msg);
         for (let item in msg.body.tracks.items) {
             let element = msg.body.tracks.items[item];
             if (!(tracksArr.includes(element.name))) {
                 tracksArr.push(element.name);
-
             }
-
         }
+        //hier wurde über artists iteriert zeile 215 dann nochmal auf artist zugegriffen
+        if (resultDiv.firstChild) {
+            while (resultDiv.firstChild.nextSibling) {
+                resultDiv.removeChild(resultDiv.firstChild);
+            }
+            resultDiv.removeChild(resultDiv.firstChild);
+        }
+        for (let item in msg.body.tracks.items) {
+            let p = document.createElement("p");
+            p.setAttribute("class", "artistName");
+            //artist array wurde nicht benutzt
+            let element = msg.body.tracks.items[item];
+            console.log('element');
+
+            console.log(element);
+
+            for (let aName in element.artists) {
+                let name = document.createTextNode(element.artists[aName].name + "-" + element.name);
+
+                p.appendChild(name);
+                resultDiv.appendChild(p);
+            }
+            console.log("element", element);
+            $(".artistName").click(function (e) {
+                e.preventDefault();
+                console.log("click");
+
+            });
+        }
+        divWishList.append(resultDiv);
 
     });
-
-    /////
 });
