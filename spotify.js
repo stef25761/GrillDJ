@@ -5,7 +5,7 @@ const SpotifyWebApi = require('spotify-web-api-node');
 class spotify {
 
     constructor() {
-
+       
         this._playlistId = '2i7NbODEswbn83cfLU4fzW';
         let redirect_uri = 'http://fs-inf-fl.berndlorenzen.de/sucess';
         this._acessToken = '';
@@ -43,6 +43,7 @@ class spotify {
 
     addTrack(data, callback) {
         //console.log('freakykeaboard1','0qsC4OhzUeGUXckcZ1VQl8',["spotify:track"+data.trackId]);
+        //TODO: addTrackToPlaylist(UserID,PLayListID,uri)
         this._spotifyApi.addTracksToPlaylist('freakykeyboard1','0qsC4OhzUeGUXckcZ1VQl8',["spotify:track:2d0hyoQ5ynDBnkvAbJKORj"])
             .catch(function (error) {
                 

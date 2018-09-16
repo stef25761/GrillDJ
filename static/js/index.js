@@ -1,4 +1,5 @@
 $(document).ready(function () {
+
     let cTC = "container text-center";
     let formGroup = "form-group";
     let controlLabel = "control-label col-sm-2";
@@ -10,15 +11,14 @@ $(document).ready(function () {
     let nextSongs = 3;
     //socket.io verbindung
     let socket = io();
-    let artistName;
-    let trackName;
-    let searchLimit = 3;
-    let artistNameSet = new Set();
-    let trackNameSet = new Set();
+   
     let artistsNameArr = [];
-    let tracksArr = [];
+   
     let divWishList = document.createElement("div");
     let resultDiv = document.createElement("div");
+
+    let artistPID;
+
     resultDiv.setAttribute("id", "resultDiv");
     $("#home").click(function (e) {
         $("#fs").empty();
@@ -33,7 +33,6 @@ $(document).ready(function () {
 
     });
     $("#wishList").click(function (e) {
-
         $("#fs").empty();
 
         divWishList.setAttribute("class", cTC);
@@ -50,58 +49,19 @@ $(document).ready(function () {
         searchInputDiv.setAttribute("class", colSM);
 
         createInput("text", "Search", "search", "Artist,Track", formControll, searchInputDiv);
+
         searchDiv.append(searchInputDiv);
-        //-------------------------------------------------------------------
-
-
-        /*
-        let submitDiv = document.createElement("div");
-        submitDiv.setAttribute("class", formGroup);
-        let submitButtonDiv = document.createElement("div");
-        submitButtonDiv.setAttribute("class", "col-sm-offset-2 col-sm-10");
-        let button = document.createElement("Button");
-        button.setAttribute("type", "button");
-        button.setAttribute("class", "btn btn-default");
-        button.setAttribute("id", "submit");
-        button.innerText = "suchen";
-        
-        submitButtonDiv.append(button);
-        
-        submitDiv.append(submitButtonDiv);
-        */
 
         divWishList.append(searchDiv);
         divWishList.append(liveSearchDiv);
 
-        //divWishList.append(submitDiv);
         $("#fs").append(divWishList);
-        // unterdrückt submit und baut eigenen
 
-        $("#submit").click(function (e) {
-            e.preventDefault();
-            artistName = $("#interpret").val();
-            trackName = $("#track").val();
-            //console.log(artistName,trackName);
-            // TODO:hier müsste dann dei Add Methode rein und nicht mehr die search!
-            artistsNameArr.length = 0;
-            tracksArr.length = 0;
-            socket.emit('addTrack', {artistName: artistName, trackName: trackName});
-        });
 
         $("#search").keyup(function (e) {
 
-            socket.emit('searchTrack', {keyWord: e.target.value});
-
-            //console.log("Item:"+artistsNameArr[0]);
-            $("#Search").autocomplete(
-                {
-                    source: artistsNameArr
-
-                }
-            );
-
+            socket.emit('searchTrack', { keyWord: e.target.value });
         });
-
 
     });
 
@@ -169,6 +129,85 @@ $(document).ready(function () {
         div.innerText = innerHTML;
         appendDiv.append(div);
     }
+    function createModal(appendDiv, artistName, trackName, albumName) {
+        /*Create the modal */
+        let modalDiv = document.createElement("div");
+        modalDiv.setAttribute("id", "modal");
+        modalDiv.setAttribute("class", "modal fade");
+        let modalDialog = document.createElement("div");
+        modalDialog.setAttribute("class", "modal-dialog");
+        let modalContent = document.createElement("div");
+        modalContent.setAttribute("class", "modal-content");
+        //-------------------------------------------
+        /*create the modal header */
+        let modalHeader = document.createElement("div");
+        modalHeader.setAttribute("class", "modal-header");
+        let h = document.createElement("h4");
+        h.innerText = "Lied hinzufügen";
+        h.setAttribute("class", "modal-title");
+        let xButton = document.createElement("button");
+        xButton.setAttribute("class", "close");
+        xButton.setAttribute("data-dismiss", "modal");
+        let t = document.createTextNode("x");
+        xButton.appendChild(t);
+        modalHeader.append(h);
+        modalHeader.append(xButton);
+        //-------------------------------------------
+        /*modal body */
+        let modalBody = document.createElement("div");
+        modalBody.setAttribute("class", "modal-body");
+        let artistNameDiv = document.createElement("div");
+        let artistNameP = document.createElement("p");
+        let artistNameL = document.createElement("label");
+        artistNameP.innerText = artistName;
+        artistNameL.innerText = "Interpret/en";
+        artistNameDiv.append(artistNameL);
+        artistNameDiv.append(artistNameP);
+
+        let TrackNameDiv = document.createElement("div");
+        let TrackNameP = document.createElement("p");
+        let TrackNameL = document.createElement("label");
+        TrackNameP.innerText = trackName;
+        TrackNameL.innerText = "Song";
+        TrackNameDiv.append(TrackNameL);
+        TrackNameDiv.append(TrackNameP);
+
+        let albumNameDiv = document.createElement("div");
+        let albumNameP = document.createElement("p");
+        let albumNameL = document.createElement("label");
+        albumNameP.innerText = albumName;
+        albumNameL.innerText = "Album";
+
+        albumNameDiv.append(albumNameL);
+        albumNameDiv.append(albumNameP);
+
+        modalBody.append(albumNameDiv);
+        modalBody.append(artistNameDiv);
+        modalBody.append(TrackNameDiv);
+        //---------------------------------------------
+        /*modal footer */
+        let modalFooter = document.createElement("div");
+        modalFooter.setAttribute("class", "modal-footer");
+        let acceptBtn = document.createElement("button");
+        let closeBtn = document.createElement("button");
+        acceptBtn.setAttribute("class","btn btn-success");
+        acceptBtn.setAttribute("id","submit");
+        let accept = document.createTextNode("Ok");
+        acceptBtn.appendChild(accept);
+        closeBtn.setAttribute("class","btn btn-danger");
+        closeBtn.setAttribute("data-dismiss","modal");
+        let close = document.createTextNode("Abbruch");
+        closeBtn.appendChild(close);
+        modalFooter.append(acceptBtn);
+        modalFooter.append(closeBtn);
+        //--------------------------------------------
+        modalContent.append(modalHeader);
+        modalContent.append(modalBody);
+        modalContent.append(modalFooter);
+        modalDialog.append(modalContent);
+        modalDiv.append(modalDialog);
+        appendDiv.append(modalDiv);
+    }
 
 
     //event wird serverseitig ausgelöst, wenn sich der client verbindet
@@ -178,60 +217,79 @@ $(document).ready(function () {
 
     //track hinzufügen
     let id = '1301WleyT98MSxVHPZCA6M';
-    //socket.emit('addTrack',{trackId:id});
-    //nach artistName, trackName oder beidem suchen
-    socket.on('artistData', (msg) => {
 
-        console.log(msg, "artistName");
 
-        for (let item in msg.body.artists.items) {
-            let element = msg.body.artists.items[item];
-            // console.log("Artist Name: "+element.name);
-            if (!(artistsNameArr.includes(element.name))) {
-                console.log("in if in artistData" + element.name);
-                artistsNameArr.push(element.name);
-            }
-        }
-    });
     socket.on('trackData', (msg) => {
+        //TODO: clear local storage!!!
         artistsNameArr.length = 0;
+        $("#resultDiv").empty();
+        //check browser compatibility
+        if (typeof (Storage) !== "undefined") {
+            // Code for localStorage/sessionStorage.
+            localStorage.setItem("TrackData", JSON.stringify(msg.body.tracks.items));
+        } else {
+            alert("not Supportet!");
+            // Sorry! No Web Storage support..
+        }
         //Todo remove console.log
-        console.log("track Response", msg);
-        for (let item in msg.body.tracks.items) {
-            let element = msg.body.tracks.items[item];
-            if (!(tracksArr.includes(element.name))) {
-                tracksArr.push(element.name);
-            }
-        }
-        //hier wurde über artists iteriert zeile 215 dann nochmal auf artist zugegriffen
-        if (resultDiv.firstChild) {
-            while (resultDiv.firstChild.nextSibling) {
-                resultDiv.removeChild(resultDiv.firstChild);
-            }
-            resultDiv.removeChild(resultDiv.firstChild);
-        }
+        // console.log("track Response", msg);
+
+
         for (let item in msg.body.tracks.items) {
             let p = document.createElement("p");
             p.setAttribute("class", "artistName");
             //artist array wurde nicht benutzt
             let element = msg.body.tracks.items[item];
-            console.log('element');
 
-            console.log(element);
+            // console.log('element', element);
 
             for (let aName in element.artists) {
+                artistPID = element.id;
                 let name = document.createTextNode(element.artists[aName].name + "-" + element.name);
 
                 p.appendChild(name);
+                p.setAttribute("id", artistPID);
                 resultDiv.appendChild(p);
-            }
-            console.log("element", element);
-            $(".artistName").click(function (e) {
-                e.preventDefault();
-                console.log("click");
 
-            });
+
+            }
+            //console.log("element", element);
+
         }
+
+        $(".artistName").click(function (e) {
+            e.preventDefault();
+            //TODO: pop up modal window send uri to spotify API
+            let trackData = JSON.parse(localStorage.getItem("TrackData"));
+            let trackName;
+            let tmpArtistName = "";
+            let albumName;
+            for (let item in trackData) {
+
+                if (trackData[item].id == e.target.id) {
+                    trackName = trackData[item].name;
+                    albumName = trackData[item].album.name;
+                    for (let name in trackData[item].artists) {
+
+                        if (name == ((trackData[item].artists.length) - 1)) {
+                            tmpArtistName += trackData[item].artists[name].name;
+
+                        } else {
+
+                            tmpArtistName += trackData[item].artists[name].name;
+                            tmpArtistName += ",";
+                        }
+                    }
+
+                }
+            }
+            createModal(divWishList,tmpArtistName,trackName,albumName);
+            $("#modal").modal();
+            //console.log(JSON.parse(localStorage.getItem("TrackData")));
+            //console.log(e.target.id);
+
+        });
+
         divWishList.append(resultDiv);
 
     });

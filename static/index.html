@@ -1,52 +1,61 @@
 <!DOCTYPE html>
-<html >
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Wünsch dir Was...</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<html>
 
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Wünsch dir Was...</title>
 
-      <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-      
-      <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-      <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-    <script src="/socket.io/socket.io.js"></script>
-    <script src="/static/js/index.js"></script>
-      <script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+  
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 
-      </script>
-    <link rel="stylesheet" href="/static/css/index.css">
-   
-  </head>
-  <body>
+ 
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="/static/js/index.js"></script>
+  <script>
 
-    <nav class="navbar navbar-inverse">
-            <div class="container-fluid">
-              <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
-                  <span class="icon-bar"></span>
-                  <span class="icon-bar"></span>
-                  <span class="icon-bar"></span> 
-                </button>
-                <a class="logo pull-left" id="home"><img src="/static/images/fsLogo.png" width="150 em" height="100 em"></a>
-              </div>
-              <div class="collapse navbar-collapse" id="myNavbar">
-                <ul class="nav navbar-nav">
-                  <li id="wishList"><a >Wünsch dir was!</a></li>
-                  <li id="playList"><a >aktuelle Playlist</a></li>  
-                </ul>
-              </div>
-            </div>
-     </nav>
-    
-     <div id="fs" class="container text-center">
-        <h3>Wünsch dir was...</h3>
-        <p>Da wir nicht immer Lust haben einen auf DJ zu machen, könnt nun auch ihr Musik, die gerne gespielt werden soll,
-            in die aktuelle Warteschlange/Playlist zu packen!
-        </p>            
+  </script>
+  <link rel="stylesheet" href="/static/css/index.css">
+
+</head>
+
+<body>
+
+  <nav class="navbar navbar-inverse">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="logo pull-left" id="home">
+          <img src="/static/images/fsLogo.png" width="150 em" height="100 em">
+        </a>
+      </div>
+      <div class="collapse navbar-collapse" id="myNavbar">
+        <ul class="nav navbar-nav">
+          <li id="wishList">
+            <a>Wünsch dir was!</a>
+          </li>
+          <li id="playList">
+            <a>aktuelle Playlist</a>
+          </li>
+        </ul>
+      </div>
     </div>
-  </body>
+  </nav>
+
+  <div id="fs" class="container text-center">
+    <h3>Wünsch dir was...</h3>
+    <p>Da wir nicht immer Lust haben einen auf DJ zu machen, könnt nun auch ihr Musik, die gerne gespielt werden soll, in die
+      aktuelle Warteschlange/Playlist zu packen!
+    </p>
+  </div>
+</body>
+
 </html>
