@@ -18,7 +18,8 @@ class websocket {
             });
 
             socket.on('addTrack',(data)=>{
-                console.log('addtrack '+data.trackId);
+                console.log('adTrack',data);
+
                 spotify.addTrack(data,(data)=>{
                     if (data.statusCode===200){
                         this._io.emit('playListUpdate',data);

@@ -16,11 +16,12 @@ $(document).ready(function () {
 
     let divWishList = document.createElement("div");
     divWishList.setAttribute("id","wishListWrapper");
-    let resultDiv = document.createElement("div");
+    let resultDiv = document.createElement("ul");
 
     let artistPID;
 
     resultDiv.setAttribute("id", "resultDiv");
+    resultDiv.setAttribute("class","list-group");
     $("#home").click(function (e) {
         $("#fs").empty();
         
@@ -147,13 +148,15 @@ $(document).ready(function () {
         let h = document.createElement("h4");
         h.innerText = "Lied hinzufügen";
         h.setAttribute("class", "modal-title");
-        let xButton = document.createElement("button");
+        h.setAttribute("class","color: #9d9d9d");
+        /*let xButton = document.createElement("button");
         xButton.setAttribute("class", "close");
         xButton.setAttribute("data-dismiss", "modal");
         let t = document.createTextNode("x");
         xButton.appendChild(t);
-        modalHeader.append(h);
+        
         modalHeader.append(xButton);
+        */
         //-------------------------------------------
         /*modal body */
         let modalBody = document.createElement("div");
@@ -162,7 +165,7 @@ $(document).ready(function () {
         let artistNameP = document.createElement("p");
         let artistNameL = document.createElement("label");
         artistNameP.innerText = artistName;
-        artistNameL.innerText = "Interpret/en";
+        artistNameL.innerText = "Interpret/en:";
         artistNameDiv.append(artistNameL);
         artistNameDiv.append(artistNameP);
 
@@ -170,7 +173,7 @@ $(document).ready(function () {
         let TrackNameP = document.createElement("p");
         let TrackNameL = document.createElement("label");
         TrackNameP.innerText = trackName;
-        TrackNameL.innerText = "Song";
+        TrackNameL.innerText = "Song:";
         TrackNameDiv.append(TrackNameL);
         TrackNameDiv.append(TrackNameP);
 
@@ -178,14 +181,14 @@ $(document).ready(function () {
         let albumNameP = document.createElement("p");
         let albumNameL = document.createElement("label");
         albumNameP.innerText = albumName;
-        albumNameL.innerText = "Album";
+        albumNameL.innerText = "Album:";
 
         albumNameDiv.append(albumNameL);
         albumNameDiv.append(albumNameP);
 
-        modalBody.append(albumNameDiv);
         modalBody.append(artistNameDiv);
         modalBody.append(TrackNameDiv);
+        modalBody.append(albumNameDiv);
         //---------------------------------------------
         /*modal footer */
         let modalFooter = document.createElement("div");
@@ -200,8 +203,9 @@ $(document).ready(function () {
         closeBtn.setAttribute("data-dismiss", "modal");
         let close = document.createTextNode("Abbruch");
         closeBtn.appendChild(close);
-        modalFooter.append(acceptBtn);
+        
         modalFooter.append(closeBtn);
+        modalFooter.append(acceptBtn);
         //--------------------------------------------
         modalContent.append(modalHeader);
         modalContent.append(modalBody);
@@ -211,10 +215,12 @@ $(document).ready(function () {
         appendDiv.append(modalDiv);
         $("#submit").click(function (e) {
             e.preventDefault();
-            console.log("Submit the spotify uri", spotifyUri);
+            console.log("Submit the spotify uri", {uri:spotifyUri});
+            socket.emit('addTrack',spotifyUri);
             $("#modal").modal("hide");
             $("#resultDiv").empty();
-           
+            $("#search").val('');
+            $("#resultDiv").removeClass("panel-body");
             let successP= document.createElement("p");
             successP.setAttribute("class","bg-success")
             successP.innerText = "Songwunsch wurde hinzugefügt";
@@ -249,8 +255,8 @@ $(document).ready(function () {
 
 
         for (let item in msg.body.tracks.items) {
-            let p = document.createElement("p");
-            p.setAttribute("class", "artistName");
+            let li = document.createElement("li");
+            li.setAttribute("class", "artistName list-group-item");
             //artist array wurde nicht benutzt
             let element = msg.body.tracks.items[item];
 
@@ -260,9 +266,9 @@ $(document).ready(function () {
                 artistPID = element.id;
                 let name = document.createTextNode(element.artists[aName].name + "-" + element.name);
 
-                p.appendChild(name);
-                p.setAttribute("id", artistPID);
-                resultDiv.appendChild(p);
+                li.appendChild(name);
+                li.setAttribute("id", artistPID);
+                resultDiv.appendChild(li);
 
 
             }
