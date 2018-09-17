@@ -11,10 +11,11 @@ $(document).ready(function () {
     let nextSongs = 3;
     //socket.io verbindung
     let socket = io();
-   
+
     let artistsNameArr = [];
-   
+
     let divWishList = document.createElement("div");
+    divWishList.setAttribute("id","wishListWrapper");
     let resultDiv = document.createElement("div");
 
     let artistPID;
@@ -22,6 +23,7 @@ $(document).ready(function () {
     resultDiv.setAttribute("id", "resultDiv");
     $("#home").click(function (e) {
         $("#fs").empty();
+        
         let h3 = document.createElement("h3");
         h3.innerText = "Wünsch dir was...";
         let p = document.createElement("p");
@@ -34,7 +36,7 @@ $(document).ready(function () {
     });
     $("#wishList").click(function (e) {
         $("#fs").empty();
-
+        $("#wishListWrapper").empty();
         divWishList.setAttribute("class", cTC);
         let liveSearchDiv = document.createElement("div");
         liveSearchDiv.setAttribute("id", "liveSearchDiv");
@@ -129,7 +131,7 @@ $(document).ready(function () {
         div.innerText = innerHTML;
         appendDiv.append(div);
     }
-    function createModal(appendDiv, artistName, trackName, albumName) {
+    function createModal(appendDiv, artistName, trackName, albumName, spotifyUri) {
         /*Create the modal */
         let modalDiv = document.createElement("div");
         modalDiv.setAttribute("id", "modal");
@@ -190,12 +192,12 @@ $(document).ready(function () {
         modalFooter.setAttribute("class", "modal-footer");
         let acceptBtn = document.createElement("button");
         let closeBtn = document.createElement("button");
-        acceptBtn.setAttribute("class","btn btn-success");
-        acceptBtn.setAttribute("id","submit");
+        acceptBtn.setAttribute("class", "btn btn-success");
+        acceptBtn.setAttribute("id", "submit");
         let accept = document.createTextNode("Ok");
         acceptBtn.appendChild(accept);
-        closeBtn.setAttribute("class","btn btn-danger");
-        closeBtn.setAttribute("data-dismiss","modal");
+        closeBtn.setAttribute("class", "btn btn-danger");
+        closeBtn.setAttribute("data-dismiss", "modal");
         let close = document.createTextNode("Abbruch");
         closeBtn.appendChild(close);
         modalFooter.append(acceptBtn);
@@ -207,6 +209,17 @@ $(document).ready(function () {
         modalDialog.append(modalContent);
         modalDiv.append(modalDialog);
         appendDiv.append(modalDiv);
+        $("#submit").click(function (e) {
+            e.preventDefault();
+            console.log("Submit the spotify uri", spotifyUri);
+            $("#modal").modal("hide");
+            $("#resultDiv").empty();
+           
+            let successP= document.createElement("p");
+            successP.setAttribute("class","bg-success")
+            successP.innerText = "Songwunsch wurde hinzugefügt";
+            $("#resultDiv").append(successP);
+        });
     }
 
 
@@ -256,19 +269,23 @@ $(document).ready(function () {
             //console.log("element", element);
 
         }
-
+        
         $(".artistName").click(function (e) {
             e.preventDefault();
+            $("#modal").remove();
+            $("#modal").empty();
             //TODO: pop up modal window send uri to spotify API
             let trackData = JSON.parse(localStorage.getItem("TrackData"));
             let trackName;
             let tmpArtistName = "";
             let albumName;
+            let spotifyUri = "";
             for (let item in trackData) {
 
                 if (trackData[item].id == e.target.id) {
                     trackName = trackData[item].name;
                     albumName = trackData[item].album.name;
+                    spotifyUri = trackData[item].uri;
                     for (let name in trackData[item].artists) {
 
                         if (name == ((trackData[item].artists.length) - 1)) {
@@ -283,7 +300,7 @@ $(document).ready(function () {
 
                 }
             }
-            createModal(divWishList,tmpArtistName,trackName,albumName);
+            createModal(divWishList, tmpArtistName, trackName, albumName, spotifyUri);
             $("#modal").modal();
             //console.log(JSON.parse(localStorage.getItem("TrackData")));
             //console.log(e.target.id);
@@ -293,4 +310,5 @@ $(document).ready(function () {
         divWishList.append(resultDiv);
 
     });
-});
+
+}); 
