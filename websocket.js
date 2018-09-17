@@ -47,6 +47,11 @@ class websocket {
 
                 });
             });*/
+           socket.on('getPlaylist',(data)=>{
+              spotify.getPlayList((data)=>{
+                 socket.emit('playListUpdate',data);
+              });
+           });
             socket.on('searchTrack',(data)=>{
                 console.log('websocket');
                 console.log(data);

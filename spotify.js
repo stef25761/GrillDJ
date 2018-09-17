@@ -44,7 +44,10 @@ class spotify {
     addTrack(data, callback) {
 
         //TODO: addTrackToPlaylist(UserID,PLayListID,uri)
-        this._spotifyApi.addTracksToPlaylist('freakykeyboard1','0qsC4OhzUeGUXckcZ1VQl8',[data])
+        this._spotifyApi.addTracksToPlaylist('GrillDJ','2i7NbODEswbn83cfLU4fzW',[data],
+            {
+                position:0
+            })
             .catch(function (error) {
                 throw new Error(error);
             })
@@ -105,7 +108,7 @@ class spotify {
     }*/
 
     getPlayList(callback) {
-        this._spotifyApi.getPlaylistTracks(this._userName, this._playlistId)
+        this._spotifyApi.getPlaylistTracks('GrillDJ', this._playlistId)
             .catch(function (error) {
                 
             })

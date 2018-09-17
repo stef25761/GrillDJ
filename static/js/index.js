@@ -14,17 +14,16 @@ $(document).ready(function () {
 
     let artistsNameArr = [];
 
-    let divWishList = document.createElement("div");
-    divWishList.setAttribute("id","wishListWrapper");
-    let resultDiv = document.createElement("ul");
+    let resultUl = document.createElement("ul");
 
     let artistPID;
 
-    resultDiv.setAttribute("id", "resultDiv");
-    resultDiv.setAttribute("class","list-group");
+    resultUl.setAttribute("id", "resultUl");
+    resultUl.setAttribute("class", "list-group");
     $("#home").click(function (e) {
         $("#fs").empty();
-        
+        $("#wishListDiv").empty();
+        $("#wishListDiv").remove();
         let h3 = document.createElement("h3");
         h3.innerText = "Wünsch dir was...";
         let p = document.createElement("p");
@@ -37,14 +36,19 @@ $(document).ready(function () {
     });
     $("#wishList").click(function (e) {
         $("#fs").empty();
-        $("#wishListWrapper").empty();
-        divWishList.setAttribute("class", cTC);
-        let liveSearchDiv = document.createElement("div");
-        liveSearchDiv.setAttribute("id", "liveSearchDiv");
+
+
+        let divWishList = document.createElement("div");
+        divWishList.setAttribute("id", "wishListDiv");
+        let resultDiv = document.createElement("div");
+
+        resultDiv.setAttribute("id", "resultDiv");
+        resultDiv.setAttribute("class", "row");
+
         //----------------------------------------------------------
         // interpret elements
         let searchDiv = document.createElement("div");
-        searchDiv.setAttribute("class", formGroup);
+        searchDiv.setAttribute("class", formGroup + " row");
 
         createLabl("Search", controlLabel, "Suche:", searchDiv);
 
@@ -56,8 +60,8 @@ $(document).ready(function () {
         searchDiv.append(searchInputDiv);
 
         divWishList.append(searchDiv);
-        divWishList.append(liveSearchDiv);
 
+        divWishList.append(resultDiv);
         $("#fs").append(divWishList);
 
 
@@ -71,27 +75,46 @@ $(document).ready(function () {
     $("#playList").click(function (e) {
         // clear only the main div,fs, childs
         $("#fs").empty();
+        $("#wishListDiv").empty();
+        $("#wishListDiv").remove();
         let parrentDiv = document.createElement("div");
         parrentDiv.setAttribute("class", panelDefault);
         createHeaderDiv(panelHeading, "aktuelles Lied", parrentDiv);
         let currentTrackDiv = document.createElement("div");
+        let playListDiv = document.createElement("div");
         currentTrackDiv.setAttribute("class", "panel-body");
         currentTrackDiv.setAttribute("id", "currentTrack");
-        currentTrackDiv.innerText = "CurrentSong";
-        parrentDiv.append(currentTrackDiv);
+    let queueDiv;
 
-        let queueDiv = document.createElement("div");
-        queueDiv.setAttribute("class", panelDefault);
+        let msg = JSON.parse(localStorage.getItem("playlist"));
+        for (let item in msg.items) {
 
-        createHeaderDiv(panelHeading, "In der Warteschlange", queueDiv);
-        let playListDiv = document.createElement("div");
-        playListDiv.setAttribute("class", panelBody);
-        for (let i = 0; i < nextSongs; i++) {
-            createNextTrackDiv(panelBody, "track" + i, "nächstes Lied" + i, playListDiv);
+
+            if (item == 0) {
+
+                currentTrackDiv.innerText = msg.items[item].track.artists[0].name + '-' + msg.items[item].track.name;
+                parrentDiv.append(currentTrackDiv);
+
+            }else {
+                queueDiv = document.createElement("div");
+                queueDiv.setAttribute("class", panelDefault);
+
+                createHeaderDiv(panelHeading, "In der Warteschlange", queueDiv);
+
+                playListDiv.setAttribute("class", panelBody);
+                if(item <= 2) {
+                    console.log(item<=2);
+                    createNextTrackDiv(panelBody, item, msg.items[item].track.artists[0].name + '-' + msg.items[item].track.name , playListDiv);
+                }
+
+
+                queueDiv.append(playListDiv);
+            }
         }
 
 
-        queueDiv.append(playListDiv);
+
+
         $("#fs").append(parrentDiv);
         $("#fs").append(queueDiv);
 
@@ -148,7 +171,7 @@ $(document).ready(function () {
         let h = document.createElement("h4");
         h.innerText = "Lied hinzufügen";
         h.setAttribute("class", "modal-title");
-        h.setAttribute("class","color: #9d9d9d");
+        h.setAttribute("class", "color: #9d9d9d");
         /*let xButton = document.createElement("button");
         xButton.setAttribute("class", "close");
         xButton.setAttribute("data-dismiss", "modal");
@@ -157,6 +180,7 @@ $(document).ready(function () {
         
         modalHeader.append(xButton);
         */
+        modalHeader.append(h);
         //-------------------------------------------
         /*modal body */
         let modalBody = document.createElement("div");
@@ -203,7 +227,7 @@ $(document).ready(function () {
         closeBtn.setAttribute("data-dismiss", "modal");
         let close = document.createTextNode("Abbruch");
         closeBtn.appendChild(close);
-        
+
         modalFooter.append(closeBtn);
         modalFooter.append(acceptBtn);
         //--------------------------------------------
@@ -215,16 +239,16 @@ $(document).ready(function () {
         appendDiv.append(modalDiv);
         $("#submit").click(function (e) {
             e.preventDefault();
-            console.log("Submit the spotify uri", {uri:spotifyUri});
-            socket.emit('addTrack',spotifyUri);
+            console.log("Submit the spotify uri", { uri: spotifyUri });
+            socket.emit('addTrack', spotifyUri);
             $("#modal").modal("hide");
-            $("#resultDiv").empty();
+            $("#resultUl").empty();
             $("#search").val('');
-            $("#resultDiv").removeClass("panel-body");
-            let successP= document.createElement("p");
-            successP.setAttribute("class","bg-success")
+            $("#resultUl").removeClass("panel-body");
+            let successP = document.createElement("p");
+            successP.setAttribute("class", "bg-success")
             successP.innerText = "Songwunsch wurde hinzugefügt";
-            $("#resultDiv").append(successP);
+            $("#resultUl").append(successP);
         });
     }
 
@@ -232,6 +256,15 @@ $(document).ready(function () {
     //event wird serverseitig ausgelöst, wenn sich der client verbindet
     socket.on('playListUpdate', (msg) => {
         //console.log('playListUpdate '+JSON.stringify(msg));
+        console.log('playListUpdate ', msg);
+        //check browser compatibility
+        if (typeof (Storage) !== "undefined") {
+            // Code for localStorage/sessionStorage.
+            localStorage.setItem("playlist", JSON.stringify(msg.body));
+        } else {
+            alert("not Supportet!");
+            // Sorry! No Web Storage support..
+        }
     });
 
     //track hinzufügen
@@ -241,7 +274,8 @@ $(document).ready(function () {
     socket.on('trackData', (msg) => {
         //TODO: clear local storage!!!
         artistsNameArr.length = 0;
-        $("#resultDiv").empty();
+
+        $("#resultUl").empty();
         //check browser compatibility
         if (typeof (Storage) !== "undefined") {
             // Code for localStorage/sessionStorage.
@@ -268,14 +302,14 @@ $(document).ready(function () {
 
                 li.appendChild(name);
                 li.setAttribute("id", artistPID);
-                resultDiv.appendChild(li);
+                resultUl.appendChild(li);
 
 
             }
             //console.log("element", element);
 
         }
-        
+
         $(".artistName").click(function (e) {
             e.preventDefault();
             $("#modal").remove();
@@ -306,14 +340,14 @@ $(document).ready(function () {
 
                 }
             }
-            createModal(divWishList, tmpArtistName, trackName, albumName, spotifyUri);
+            let getDivWIshList = $("#wishListDiv");
+            createModal(getDivWIshList, tmpArtistName, trackName, albumName, spotifyUri);
             $("#modal").modal();
             //console.log(JSON.parse(localStorage.getItem("TrackData")));
             //console.log(e.target.id);
 
         });
-
-        divWishList.append(resultDiv);
+        $("#resultDiv").append(resultUl);
 
     });
 
