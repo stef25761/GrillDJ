@@ -40,7 +40,16 @@ class spotify {
             }
         );
     }
+    getCurrentPlaybackState(callback){
+        this._spotifyApi.getMyCurrentPlaybackState()
+            .catch(function (error) {
+            console.log('Something went wrong ',err);
 
+        }).then(function (data) {
+            console.log(data);
+            callback(data);
+        });
+    }
     addTrack(data, callback) {
 
         //TODO: addTrackToPlaylist(UserID,PLayListID,uri)

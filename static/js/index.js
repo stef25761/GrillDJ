@@ -254,6 +254,9 @@ $(document).ready(function () {
 
 
     //event wird serverseitig ausgelöst, wenn sich der client verbindet
+    socket.on('playbackState',(msg)=>{
+       console.log('playbackstate',msg);
+    });
     socket.on('playListUpdate', (msg) => {
         //console.log('playListUpdate '+JSON.stringify(msg));
         console.log('playListUpdate ', msg);

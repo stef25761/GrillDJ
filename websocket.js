@@ -12,6 +12,9 @@ class websocket {
 
         this._io.on('connection', (socket)=> {
             console.log('client verbunden');
+            spotify.getCurrentPlaybackState((data)=>{
+                socket.emit('playbackState',data);
+            });
             spotify.getPlayList((data)=>{
 
                 socket.emit('playListUpdate',data);

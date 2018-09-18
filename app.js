@@ -19,7 +19,7 @@ app.use('/index', (req, res) => {
 
 app.use('/static', express.static(path.join(__dirname, path.sep, 'static')));
 app.get('/admin', (req, res) => {
-    let scopes = ['user-read-private user-read-email playlist-modify-private playlist-read-private'];
+    let scopes = ['user-read-private user-read-email playlist-modify-private playlist-read-private user-read-currently-playing user-read-playback-state '];
     let redirect_uri = 'http://fs-inf-fl.berndlorenzen.de/sucess';
     spotify._spotifyApi.setRedirectURI(redirect_uri);
     let authorizeUrl = spotify._spotifyApi.createAuthorizeURL(scopes, 'state', true);
