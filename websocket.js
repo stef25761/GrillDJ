@@ -10,26 +10,26 @@ class websocket {
     init(server) {
         this._io = require('socket.io')(server);
 
-        this._io.on('connection', (socket)=> {
+        this._io.on('connection', (socket) => {
             console.log('client verbunden');
-            spotify.getCurrentPlaybackState((data)=>{
-                socket.emit('playbackState',data);
+            spotify.getCurrentPlaybackState((data) => {
+                socket.emit('playbackState', data);
             });
-            spotify.getPlayList((data)=>{
+            spotify.getPlayList((data) => {
 
-                socket.emit('playListUpdate',data);
+                socket.emit('playListUpdate', data);
             });
 
-            socket.on('addTrack',(data)=>{
-                console.log('adTrack',data);
+            socket.on('addTrack', (data) => {
+                console.log('adTrack', data);
 
-                spotify.addTrack(data,(data)=>{
-                    if (data.statusCode===200){
-                        this._io.emit('playListUpdate',data);
-                    }else if(data.statusCode===401){
+                spotify.addTrack(data, (data) => {
+                    if (data.statusCode === 200) {
+                        this._io.emit('playListUpdate', data);
+                    } else if (data.statusCode === 401) {
                         spotify.refreshToken();
-                        spotify.addTrack(data,(data)=>{
-                            this._io.emit('playListUpdate',data);
+                        spotify.addTrack(data, (data) => {
+                            this._io.emit('playListUpdate', data);
                         });
                     }
 
@@ -38,41 +38,47 @@ class websocket {
             });
             //ToDo delete
             //no longer needed ?
-           /* socket.on('searchArtist',(data)=>{
-                console.log('search '+JSON.stringify(data));
-               spotify.searchArtist(data,(data)=>{
-                   if (data.statusCode===200){
-                       socket.emit('artistData',(data));
-                   }else if (data.statusCode===401){
-                       spotify.refreshToken();
-                       socket.emit('artistData',(data));
-                   }
+            /* socket.on('searchArtist',(data)=>{
+                 console.log('search '+JSON.stringify(data));
+                spotify.searchArtist(data,(data)=>{
+                    if (data.statusCode===200){
+                        socket.emit('artistData',(data));
+                    }else if (data.statusCode===401){
+                        spotify.refreshToken();
+                        socket.emit('artistData',(data));
+                    }
 
+                 });
+             });*/
+            socket.on('getPlaylist', (data) => {
+                spotify.getPlayList((data) => {
+                    socket.emit('playListUpdate', data);
                 });
-            });*/
-           socket.on('getPlaylist',(data)=>{
-              spotify.getPlayList((data)=>{
-                 socket.emit('playListUpdate',data);
-              });
-           });
-            socket.on('searchTrack',(data)=>{
+            });
+            socket.on('searchTrack', (data) => {
                 console.log('websocket');
                 console.log(data);
-                spotify.searchTracks(data,(data)=>{
+                spotify.searchTracks(data, (data) => {
 
-                    if (data.statusCode===200){
-                        socket.emit('trackData',(data));
-                    } else if (data.statusCode===401){
+                    if (data.statusCode === 200) {
+                        socket.emit('trackData', (data));
+                    } else if (data.statusCode === 401) {
                         spotify.refreshToken();
                     }
                 });
             });
-
+            var myInt = setInterval(function () {
+                console.log('intervall');
+                spotify.getCurrentPlaybackState((data) => {
+                    socket.emit('playbackState', data);
+                });
+            }, 1000*60*2);
 
         });
 
-    }
 
+
+    }
 }
 
 const ws = new websocket();
