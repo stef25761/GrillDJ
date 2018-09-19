@@ -36,7 +36,7 @@ class websocket {
 
                 });
             });
-            //ToDo delete
+            //ToDo: delete
             //no longer needed ?
             /* socket.on('searchArtist',(data)=>{
                  console.log('search '+JSON.stringify(data));
