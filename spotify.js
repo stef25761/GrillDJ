@@ -60,12 +60,12 @@ class spotify {
         });
     }
 
-    addTrack(data, callback) {
+    addTrack(data, callback, desiredPosition) {
 
         //TODO: addTrackToPlaylist(UserID,PLayListID,uri)
         this._spotifyApi.addTracksToPlaylist('GrillDJ', '2i7NbODEswbn83cfLU4fzW', [data],
             {
-                position: 0
+                position: desiredPosition
             })
             .catch(function(){
 

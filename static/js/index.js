@@ -20,7 +20,8 @@ $(document).ready(function () {
     let resultUl = document.createElement("ul");
     let trackPosNumber;
     let artistPID;
-
+    let nextSong;
+   
     resultUl.setAttribute("id", "resultUl");
     resultUl.setAttribute("class", "list-group");
     $("#home").click(function (e) {
@@ -90,9 +91,9 @@ $(document).ready(function () {
         currentTrackDiv.setAttribute("id", "currentTrack");
         let queueDiv;
 
-        let msg = JSON.parse(localStorage.getItem("playlist"));
+        let msg = playlist;
         for (let item in msg.items) {
-
+            let playListSize = msg.items.length;
             currentTrackDiv.innerText = currentSong;
             parrentDiv.append(currentTrackDiv);
             queueDiv = document.createElement("div");
@@ -106,30 +107,36 @@ $(document).ready(function () {
 
             if (foundIt) {
                 trackPosNumber = msg.items[item].track.track_number;
-                let placeTwo = 0;
-                let thirdPlace = 0;
-                console.log(msg.items.length);
-                if (msg.items.length == 1) {
-                    placeTwo = parseInt(item, 10);
-                } else if (msg.items.length == 2) {
-                    placeTwo = parseInt(item, 10) + 1;
+                let placeTwo = parseInt(item, 10) + 1;
+                let thirdPlace = parseInt(item, 10) + 2;
+
+                if (thirdPlace >= playListSize) {
+                    if (!(placeTwo >= playListSize)) {
+
+                        nextSong = msg.items[placeTwo].track.artists[0].name + '-'
+                            + msg.items[placeTwo].track.name;
+
+                        createNextTrackDiv(panelBody, "nextSong",
+                            nextSong, playListDiv);
+                    }
+
+                    let errMessage = " Das Ende der Playlist ist fast erreicht!";
+                    createNextTrackDiv(panelBody, "errMessage",
+                        errMessage, playListDiv);
+
                 } else {
-                    placeTwo = parseInt(item, 10) + 1;
-                    thirdPlace = parseInt(item, 10) + 2;
+                    nextSong = msg.items[placeTwo].track.artists[0].name + '-'
+                        + msg.items[placeTwo].track.name;
+                    let songAfterNext = msg.items[thirdPlace].track.artists[0].name + '-'
+                        + msg.items[thirdPlace].track.name;
+
+                    createNextTrackDiv(panelBody, "nextSong",
+                        nextSong, playListDiv);
+
+                    createNextTrackDiv(panelBody, "thirdSong",
+                        songAfterNext, playListDiv);
+
                 }
-
-
-                let nextSong = msg.items[placeTwo].track.artists[0].name + '-'
-                    + msg.items[placeTwo].track.name;
-                let songAfterNext = msg.items[thirdPlace].track.artists[0].name + '-'
-                    + msg.items[thirdPlace].track.name
-                createNextTrackDiv(panelBody, "nextSong",
-                    nextSong, playListDiv);
-
-                createNextTrackDiv(panelBody, "thirdSong",
-                    songAfterNext, playListDiv);
-
-
             }
             queueDiv.append(playListDiv);
         }
@@ -260,7 +267,10 @@ $(document).ready(function () {
         $("#submit").click(function (e) {
             e.preventDefault();
 
+           
             let exist = false;
+
+            let playlistSize = playlist.items.length;
             for (let item in playlist.items) {
                 if (spotifyUri === playlist.items[item].track.uri) exist = true;
             }
@@ -275,7 +285,12 @@ $(document).ready(function () {
                 failP.innerText = "Songwunsch wurde schon hinzugefügt";
                 $("#resultUl").append(failP);
             } else {
-                socket.emit('addTrack', spotifyUri);
+                if (playlistSize != 0) {
+                    socket.emit('addTrack', spotifyUri, parseInt(playlistSize) - 1);
+                } else {
+                    socket.emit('addTrack', spotifyUri, parseInt(playlistSize));
+                }
+
                 $("#modal").modal("hide");
                 $("#resultUl").empty();
                 $("#search").val('');
@@ -289,6 +304,21 @@ $(document).ready(function () {
 
         });
     }
+
+
+    socket.on('playListUpdate', (msg) => {
+        //console.log('playListUpdate '+JSON.stringify(msg));
+        console.log('playListUpdate ', msg);
+
+        //check browser compatibility
+        if (typeof (Storage) !== "undefined") {
+            // Code for localStorage/sessionStorage.
+            localStorage.setItem("playlist", JSON.stringify(msg.body));
+        } else {
+            alert("not Supportet!");
+            // Sorry! No Web Storage support..
+        }
+    });
 
 
     //event wird serverseitig ausgelöst, wenn sich der client verbindet
@@ -309,19 +339,9 @@ $(document).ready(function () {
             currentSong = currentInterpredName + " - " + currentSongName;
         }
     });
-    socket.on('playListUpdate', (msg) => {
-        //console.log('playListUpdate '+JSON.stringify(msg));
-        console.log('playListUpdate ', msg);
 
-        //check browser compatibility
-        if (typeof (Storage) !== "undefined") {
-            // Code for localStorage/sessionStorage.
-            localStorage.setItem("playlist", JSON.stringify(msg.body));
-        } else {
-            alert("not Supportet!");
-            // Sorry! No Web Storage support..
-        }
-    });
+
+
 
     //track hinzufügen
     let id = '1301WleyT98MSxVHPZCA6M';
