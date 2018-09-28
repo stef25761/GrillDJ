@@ -8,14 +8,17 @@ $(document).ready(function () {
     let panelBody = "panel-body";
     let panelDefault = "panel panel-default";
     let panelHeading = "panel-heading";
-    let nextSongs = 3;
+
     //socket.io verbindung
     let socket = io();
-
+    let currentSongName;
+    let currentInterpredName;
+    let currentSong;
+    let currentSongID;
     let artistsNameArr = [];
-
+    let playlist = JSON.parse(localStorage.getItem("playlist"));
     let resultUl = document.createElement("ul");
-
+    let trackPosNumber;
     let artistPID;
 
     resultUl.setAttribute("id", "resultUl");
@@ -77,6 +80,7 @@ $(document).ready(function () {
         $("#fs").empty();
         $("#wishListDiv").empty();
         $("#wishListDiv").remove();
+
         let parrentDiv = document.createElement("div");
         parrentDiv.setAttribute("class", panelDefault);
         createHeaderDiv(panelHeading, "aktuelles Lied", parrentDiv);
@@ -84,41 +88,57 @@ $(document).ready(function () {
         let playListDiv = document.createElement("div");
         currentTrackDiv.setAttribute("class", "panel-body");
         currentTrackDiv.setAttribute("id", "currentTrack");
-    let queueDiv;
+        let queueDiv;
 
         let msg = JSON.parse(localStorage.getItem("playlist"));
         for (let item in msg.items) {
 
+            currentTrackDiv.innerText = currentSong;
+            parrentDiv.append(currentTrackDiv);
+            queueDiv = document.createElement("div");
+            queueDiv.setAttribute("class", panelDefault);
 
-            if (item == 0) {
+            createHeaderDiv(panelHeading, "In der Warteschlange", queueDiv);
+            let foundIt = false;
+            if (currentSongID != null) foundIt = currentSongID == msg.items[item].track.id;
 
-                currentTrackDiv.innerText = msg.items[item].track.artists[0].name + '-' + msg.items[item].track.name;
-                parrentDiv.append(currentTrackDiv);
+            playListDiv.setAttribute("class", panelBody);
 
-            }else {
-                queueDiv = document.createElement("div");
-                queueDiv.setAttribute("class", panelDefault);
-
-                createHeaderDiv(panelHeading, "In der Warteschlange", queueDiv);
-
-                playListDiv.setAttribute("class", panelBody);
-                if(item <= 2) {
-                    console.log(item<=2);
-                    createNextTrackDiv(panelBody, item, msg.items[item].track.artists[0].name + '-' + msg.items[item].track.name , playListDiv);
+            if (foundIt) {
+                trackPosNumber = msg.items[item].track.track_number;
+                let placeTwo = 0;
+                let thirdPlace = 0;
+                console.log(msg.items.length);
+                if (msg.items.length == 1) {
+                    placeTwo = parseInt(item, 10);
+                } else if (msg.items.length == 2) {
+                    placeTwo = parseInt(item, 10) + 1;
+                } else {
+                    placeTwo = parseInt(item, 10) + 1;
+                    thirdPlace = parseInt(item, 10) + 2;
                 }
 
 
-                queueDiv.append(playListDiv);
+                let nextSong = msg.items[placeTwo].track.artists[0].name + '-'
+                    + msg.items[placeTwo].track.name;
+                let songAfterNext = msg.items[thirdPlace].track.artists[0].name + '-'
+                    + msg.items[thirdPlace].track.name
+                createNextTrackDiv(panelBody, "nextSong",
+                    nextSong, playListDiv);
+
+                createNextTrackDiv(panelBody, "thirdSong",
+                    songAfterNext, playListDiv);
+
+
             }
+            queueDiv.append(playListDiv);
         }
-
-
-
 
         $("#fs").append(parrentDiv);
         $("#fs").append(queueDiv);
 
     });
+
 
     function createLabl(forTag, classTag, innerHTML, appendDiv) {
 
@@ -239,27 +259,60 @@ $(document).ready(function () {
         appendDiv.append(modalDiv);
         $("#submit").click(function (e) {
             e.preventDefault();
+
+            let exist = false;
+            for (let item in playlist.items) {
+                if (spotifyUri === playlist.items[item].track.uri) exist = true;
+            }
+
+
+            if (exist) {
+                $("#modal").modal("hide");
+                $("#resultUl").empty();
+                $("#resultUl").removeClass("panel-body");
+                let failP = document.createElement("p");
+                failP.setAttribute("class", "bg-danger");
+                failP.innerText = "Songwunsch wurde schon hinzugefügt";
+                $("#resultUl").append(failP);
+            } else {
+                socket.emit('addTrack', spotifyUri);
+                $("#modal").modal("hide");
+                $("#resultUl").empty();
+                $("#search").val('');
+                $("#resultUl").removeClass("panel-body");
+                let successP = document.createElement("p");
+                successP.setAttribute("class", "bg-success")
+                successP.innerText = "Songwunsch wurde hinzugefügt";
+                $("#resultUl").append(successP);
+            }
             console.log("Submit the spotify uri", { uri: spotifyUri });
-            socket.emit('addTrack', spotifyUri);
-            $("#modal").modal("hide");
-            $("#resultUl").empty();
-            $("#search").val('');
-            $("#resultUl").removeClass("panel-body");
-            let successP = document.createElement("p");
-            successP.setAttribute("class", "bg-success")
-            successP.innerText = "Songwunsch wurde hinzugefügt";
-            $("#resultUl").append(successP);
+
         });
     }
 
 
     //event wird serverseitig ausgelöst, wenn sich der client verbindet
-    socket.on('playbackState',(msg)=>{
-       console.log('playbackstate',msg);
+    socket.on('playbackState', (msg) => {
+        console.log('playbackstate', msg);
+
+        if (msg.body.item) {
+            currentSongName = msg.body.item.name;
+            currentSongID = msg.body.item.id;
+
+
+            for (let item in msg.body.item.artists) {
+                if (item == 0) {
+                    currentInterpredName = msg.body.item.artists[item].name
+                }
+
+            }
+            currentSong = currentInterpredName + " - " + currentSongName;
+        }
     });
     socket.on('playListUpdate', (msg) => {
         //console.log('playListUpdate '+JSON.stringify(msg));
         console.log('playListUpdate ', msg);
+
         //check browser compatibility
         if (typeof (Storage) !== "undefined") {
             // Code for localStorage/sessionStorage.
@@ -288,7 +341,7 @@ $(document).ready(function () {
             // Sorry! No Web Storage support..
         }
         //Todo remove console.log
-        // console.log("track Response", msg);
+
 
 
         for (let item in msg.body.tracks.items) {
@@ -296,21 +349,13 @@ $(document).ready(function () {
             li.setAttribute("class", "artistName list-group-item");
             //artist array wurde nicht benutzt
             let element = msg.body.tracks.items[item];
-
-            // console.log('element', element);
-
             for (let aName in element.artists) {
                 artistPID = element.id;
                 let name = document.createTextNode(element.artists[aName].name + "-" + element.name);
-
                 li.appendChild(name);
                 li.setAttribute("id", artistPID);
                 resultUl.appendChild(li);
-
-
             }
-            //console.log("element", element);
-
         }
 
         $(".artistName").click(function (e) {
@@ -346,12 +391,10 @@ $(document).ready(function () {
             let getDivWIshList = $("#wishListDiv");
             createModal(getDivWIshList, tmpArtistName, trackName, albumName, spotifyUri);
             $("#modal").modal();
-            //console.log(JSON.parse(localStorage.getItem("TrackData")));
-            //console.log(e.target.id);
-
         });
         $("#resultDiv").append(resultUl);
 
     });
 
-}); 
+});
+

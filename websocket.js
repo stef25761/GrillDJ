@@ -4,14 +4,17 @@ const path=require('path');
 const spotify=require(path.join(__dirname,path.sep,'spotify')).spotify();
 class websocket {
     constructor() {
-
+    this._client=0;
     }
 
     init(server) {
+
         this._io = require('socket.io')(server);
 
         this._io.on('connection', (socket) => {
-            console.log('client verbunden');
+            this._client++;
+
+            console.log('clients verbunden ',this._client);
             spotify.getCurrentPlaybackState((data) => {
                 socket.emit('playbackState', data);
             });
@@ -21,7 +24,7 @@ class websocket {
             });
 
             socket.on('addTrack', (data) => {
-                console.log('adTrack', data);
+
 
                 spotify.addTrack(data, (data) => {
                     if (data.statusCode === 200) {
@@ -56,8 +59,8 @@ class websocket {
                 });
             });
             socket.on('searchTrack', (data) => {
-                console.log('websocket');
-                console.log(data);
+
+
                 spotify.searchTracks(data, (data) => {
 
                     if (data.statusCode === 200) {
@@ -68,12 +71,14 @@ class websocket {
                 });
             });
             var myInt = setInterval(function () {
-                console.log('intervall');
                 spotify.getCurrentPlaybackState((data) => {
                     socket.emit('playbackState', data);
                 });
-            }, 1000*60*2);
-
+            }, 1000*30);
+            socket.on('disconnect',()=>{
+                this._client--;
+                console.log('clients verbunden ',this._client);
+            })
         });
 
 
