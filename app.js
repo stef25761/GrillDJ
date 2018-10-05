@@ -16,11 +16,6 @@ const spotify = require(path.join(__dirname, path.sep, 'spotify')).spotify();
 
 websocket.init(server);
 
-var basic = auth.basic({
-    realm: "Simon Area.",
-    file:path.join(__dirname,path.sep,'credentials.txt')
-
-});
 app.use('/index', (req, res) => {
     res.sendFile(path.join(__dirname, path.sep, 'static', path.sep, 'index.html'));
 });
