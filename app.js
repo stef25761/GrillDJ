@@ -21,7 +21,7 @@ app.use('/index', (req, res) => {
 });
 
 app.use('/static', express.static(path.join(__dirname, path.sep, 'static')));
-app.get('/admin',auth.connect(basic),(req,res)=>{
+app.get('/admin',(req,res)=>{
     res.send(`Hello from admin area - ${req.user}!`);
 });
 app.get('/authenticate', (req, res) => {
