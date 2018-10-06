@@ -15,7 +15,7 @@ const spotify = require(path.join(__dirname, path.sep, 'spotify')).spotify();
 
 
 websocket.init(server);
-app.get('/index',(req,res)=>{
+app.get('/',(req,res)=>{
    res.send('root')
 });
 app.use('/index', (req, res) => {
