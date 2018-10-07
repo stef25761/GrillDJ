@@ -8,16 +8,22 @@ const app = express();
 const server = require('http').createServer(app);
 const path = require('path');
 const url = require('url');
+const fs=require('fs');
 
 
 const websocket = require(path.join(__dirname, path.sep, 'websocket')).getWsInstance();
 const spotify = require(path.join(__dirname, path.sep, 'spotify')).spotify();
 
+//get challenge-token from file
+const a_string=fs.readFileSync(path.join(__dirname,path.sep,'static',path.sep,'acme-challenge',path.sep,'a-string'),{encoding:'utf8'});
 
 websocket.init(server);
-app.get('/',(req,res)=>{
-   res.send('root')
-});
+//define a route for challenge
+app.get('/.well-known/acme-challenge/'+a_string,(req,res)=>{
+    res.writeHead(200, {'Content-Type': 'text/html'});
+    res.write(a_string);
+    res.end();
+})
 app.use('/index', (req, res) => {
     res.sendFile(path.join(__dirname, path.sep, 'static', path.sep, 'index.html'));
 });
