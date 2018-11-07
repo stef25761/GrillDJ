@@ -72,6 +72,7 @@ class websocket {
             });
             var myInt = setInterval(function () {
                 spotify.getCurrentPlaybackState((data) => {
+                    console.log('playbackState ',data);
                     socket.emit('playbackState', data);
                 });
             }, 1000*30);

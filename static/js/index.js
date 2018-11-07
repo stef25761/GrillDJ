@@ -77,74 +77,100 @@ $(document).ready(function () {
     });
 
     $("#playList").click(function (e) {
-        // clear only the main div,fs, childs
+        //clear only the main div,fs, childs
         $("#fs").empty();
         $("#wishListDiv").empty();
-        $("#wishListDiv").remove();
+       // $("#wishListDiv").remove();
 
         let parrentDiv = document.createElement("div");
+
         parrentDiv.setAttribute("class", panelDefault);
         createHeaderDiv(panelHeading, "aktuelles Lied", parrentDiv);
         let currentTrackDiv = document.createElement("div");
         let playListDiv = document.createElement("div");
+        createNextTrackDiv(panelBody, "secondSong",
+            "", playListDiv);
+        createNextTrackDiv(panelBody, "thirdSong",
+            "", playListDiv);
         currentTrackDiv.setAttribute("class", "panel-body");
         currentTrackDiv.setAttribute("id", "currentTrack");
-        let queueDiv;
 
-        let msg = playlist;
-        for (let item in msg.items) {
-            let playListSize = msg.items.length;
-            currentTrackDiv.innerText = currentSong;
-            parrentDiv.append(currentTrackDiv);
-            queueDiv = document.createElement("div");
-            queueDiv.setAttribute("class", panelDefault);
 
-            createHeaderDiv(panelHeading, "In der Warteschlange", queueDiv);
+        parrentDiv.append(currentTrackDiv);
+        let queueDiv = document.createElement("div");
+
+        queueDiv.setAttribute("class", panelDefault);
+        createHeaderDiv(panelHeading, "In der Warteschlange", queueDiv);
+        playListDiv.setAttribute("class", panelBody);
+        playListDiv.setAttribute("id","playListDiv");
+        queueDiv.append(playListDiv);
+
+
+        $("#fs").append(parrentDiv);
+        $("#fs").append(queueDiv);
+        fillPlaylist();
+    });
+    function fillPlaylist(){
+console.log('fillPlaylist');
+
+        let playListDiv=$("#playListDiv");
+        let currentTrackDiv=$("#currentTrack");
+        let secondSong=$("#secondSong");
+        let thirdSong=$("#thirdSong");
+        currentTrackDiv.empty();
+        secondSong.empty();
+        thirdSong.empty();
+        console.log('currentSongElement ',$("#currentTrack"));
+        let text=document.createTextNode(currentSong);
+        currentTrackDiv.append(text);
+        for (let item in playlist.items) {
+            let playListSize = playlist.items.length;
+
             let foundIt = false;
-            if (currentSongID != null) foundIt = currentSongID == msg.items[item].track.id;
-
-            playListDiv.setAttribute("class", panelBody);
+            if (currentSongID != null) {
+                foundIt = currentSongID == playlist.items[item].track.id;
+            }
 
             if (foundIt) {
-                trackPosNumber = msg.items[item].track.track_number;
+
                 let placeTwo = parseInt(item, 10) + 1;
                 let thirdPlace = parseInt(item, 10) + 2;
 
                 if (thirdPlace >= playListSize) {
                     if (!(placeTwo >= playListSize)) {
+                        nextSong = playlist.items[placeTwo].track.artists[0].name + '-'
+                            + playlist.items[placeTwo].track.name;
+                        let text=document.createTextNode(nextSong);
+                        secondSong.append(nextSong);
 
-                        nextSong = msg.items[placeTwo].track.artists[0].name + '-'
-                            + msg.items[placeTwo].track.name;
 
-                        createNextTrackDiv(panelBody, "nextSong",
-                            nextSong, playListDiv);
+
+
                     }
 
-                    let errMessage = " Das Ende der Playlist ist fast erreicht!";
-                    createNextTrackDiv(panelBody, "errMessage",
-                        errMessage, playListDiv);
+                    let errMessage =document.createTextNode( " Das Ende der Playlist ist fast erreicht!");
+                    thirdSong.append(errMessage)
+
 
                 } else {
-                    nextSong = msg.items[placeTwo].track.artists[0].name + '-'
-                        + msg.items[placeTwo].track.name;
-                    let songAfterNext = msg.items[thirdPlace].track.artists[0].name + '-'
-                        + msg.items[thirdPlace].track.name;
+                    nextSong = playlist.items[placeTwo].track.artists[0].name + '-'
+                        + playlist.items[placeTwo].track.name;
+                    let songAfterNext = playlist.items[thirdPlace].track.artists[0].name + '-'
+                        + playlist.items[thirdPlace].track.name;
+                    let text=document.createTextNode(nextSong);
+                    secondSong.append(text);
+                    text=document.createTextNode(songAfterNext);
+                    thirdSong.append(text);
 
-                    createNextTrackDiv(panelBody, "nextSong",
-                        nextSong, playListDiv);
+                    console.log('secondSong ',nextSong);
+                    console.log('thirdSong ',songAfterNext);
 
-                    createNextTrackDiv(panelBody, "thirdSong",
-                        songAfterNext, playListDiv);
 
                 }
             }
-            queueDiv.append(playListDiv);
+
         }
-
-        $("#fs").append(parrentDiv);
-        $("#fs").append(queueDiv);
-
-    });
+    }
 
 
     function createLabl(forTag, classTag, innerHTML, appendDiv) {
@@ -338,6 +364,7 @@ $(document).ready(function () {
             }
             currentSong = currentInterpredName + " - " + currentSongName;
         }
+        fillPlaylist();
     });
 
 
