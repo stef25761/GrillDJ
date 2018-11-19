@@ -6,7 +6,7 @@ class spotify {
 
     constructor() {
 
-        this._playlistId = '2i7NbODEswbn83cfLU4fzW';
+        this._playlistId = '3VIztSmDQWyrDRE1JOnIjp';
         let redirect_uri = 'http://fs-inf-fl.berndlorenzen.de/sucess';
         this._acessToken = '';
         this._spotifyApi = new SpotifyWebApi(
@@ -63,7 +63,7 @@ class spotify {
     addTrack(data, callback, desiredPosition) {
 
         //TODO: addTrackToPlaylist(UserID,PLayListID,uri)
-        this._spotifyApi.addTracksToPlaylist('GrillDJ', '2i7NbODEswbn83cfLU4fzW', [data],
+        this._spotifyApi.addTracksToPlaylist('Dieter', '3VIztSmDQWyrDRE1JOnIjp', [data],
             {
                 position: desiredPosition
             })
@@ -97,7 +97,7 @@ class spotify {
         this._spotifyApi.searchTracks(data.keyWord)
 
             .catch(function (error) {
-                console.log('error search track ',error)
+                console.log('error search track ',error);
                instance.errorHandling(error);
             })
 
@@ -112,7 +112,7 @@ class spotify {
 
 
     getPlayList(callback) {
-        this._spotifyApi.getPlaylistTracks('GrillDJ', this._playlistId)
+        this._spotifyApi.getPlaylistTracks('Dieter', this._playlistId)
             .catch(function(){
 
             })

@@ -23,7 +23,7 @@ app.get('/.well-known/acme-challenge/'+a_string,(req,res)=>{
     res.writeHead(200, {'Content-Type': 'text/html'});
     res.write(a_string);
     res.end();
-})
+});
 app.use('/index', (req, res) => {
     res.sendFile(path.join(__dirname, path.sep, 'static', path.sep, 'index.html'));
 });
