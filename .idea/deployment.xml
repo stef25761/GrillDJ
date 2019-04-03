@@ -5,8 +5,12 @@
       <paths name="berndlorenzen.de">
         <serverdata>
           <mappings>
-            <mapping deploy="/" local="$PROJECT_DIR$" web="/" />
+            <mapping deploy="/var/www/html/GrillDJ" local="$PROJECT_DIR$" web="/" />
           </mappings>
+          <excludedPaths>
+            <excludedPath local="true" path="$PROJECT_DIR$" />
+            <excludedPath path="/var/www/html/GrillDJ/node_modules" />
+          </excludedPaths>
         </serverdata>
       </paths>
     </serverData>

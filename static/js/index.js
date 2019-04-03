@@ -333,7 +333,7 @@ console.log('fillPlaylist');
 
 
     socket.on('playListUpdate', (msg) => {
-        //console.log('playListUpdate '+JSON.stringify(msg));
+        console.log('playListUpdate '+JSON.stringify(msg));
         console.log('playListUpdate ', msg);
 
         //check browser compatibility

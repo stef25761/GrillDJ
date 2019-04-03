@@ -34,7 +34,7 @@ app.get('/admin',(req,res)=>{
 });
 app.get('/authenticate', (req, res) => {
     let scopes = ['user-read-private user-read-email playlist-modify-private playlist-read-private user-read-currently-playing user-read-playback-state playlist-modify-public '];
-    let redirect_uri = 'http://fs-inf-fl.berndlorenzen.de/sucess';
+    let redirect_uri = 'http://fs.berndlorenzen.de/sucess';
     spotify._spotifyApi.setRedirectURI(redirect_uri);
     let authorizeUrl = spotify._spotifyApi.createAuthorizeURL(scopes, 'state', true);
 
@@ -43,8 +43,8 @@ app.get('/authenticate', (req, res) => {
 });
 
 app.get('/sucess', (req, res) => {
-
-    let redirect_uri = 'http://fs-inf-fl.berndlorenzen.de/sucess';
+//Todo warum zweimal
+    let redirect_uri = 'http://fs.berndlorenzen.de/sucess';
     let query = url.parse(req.url, true).query;
     let code = query.code;
     let authOptions = {
