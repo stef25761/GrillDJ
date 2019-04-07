@@ -13,7 +13,7 @@ class spotify {
             {
                 redirect_uri: redirect_uri,
                 clientId: 'c41189cb617a40998ccd58d2cc114494',
-                clientSecret: '9934a3c78b214a8c8462ed45625efcee'
+                clientSecret: 'd1cc30aee7a1471bb565e3335c84139c'
             });
 
 

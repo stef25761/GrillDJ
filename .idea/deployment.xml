@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="PublishConfigData" serverName="berndlorenzen.de" showNewOnSourceInSync="false" showNewOnTargetInSync="false">
+  <component name="PublishConfigData" serverName="grillDj" showNewOnSourceInSync="false" showNewOnTargetInSync="false">
     <serverData>
-      <paths name="berndlorenzen.de">
+      <paths name="grillDj">
         <serverdata>
           <mappings>
-            <mapping deploy="/var/www/html/GrillDJ" local="$PROJECT_DIR$" web="/" />
+            <mapping deploy="/GrillDJ" local="$PROJECT_DIR$" web="/" />
           </mappings>
           <excludedPaths>
-            <excludedPath local="true" path="$PROJECT_DIR$" />
-            <excludedPath path="/var/www/html/GrillDJ/node_modules" />
+            <excludedPath path="/GrillDJ/node_modules" />
+            <excludedPath local="true" path="$PROJECT_DIR$/node_modules" />
           </excludedPaths>
         </serverdata>
       </paths>

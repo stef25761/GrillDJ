@@ -43,6 +43,8 @@ app.get('/authenticate', (req, res) => {
 });
 
 app.get('/sucess', (req, res) => {
+
+
 //Todo warum zweimal
     let redirect_uri = 'http://fs.berndlorenzen.de/sucess';
     let query = url.parse(req.url, true).query;
@@ -55,7 +57,7 @@ app.get('/sucess', (req, res) => {
             grant_type: 'authorization_code'
         },
         headers: {
-            'Authorization': 'Basic ' + (new Buffer('c41189cb617a40998ccd58d2cc114494' + ':' + '0628aec1113e455185747887984496a6').toString('base64'))
+            'Authorization': 'Basic ' + (new Buffer('c41189cb617a40998ccd58d2cc114494' + ':' + 'd1cc30aee7a1471bb565e3335c84139c').toString('base64'))
         },
         json: true
     };

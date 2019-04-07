@@ -2,8 +2,8 @@
 <project version="4">
   <component name="WebServers">
     <option name="servers">
-      <webServer id="86035c47-a96d-4f15-bf11-f3e0acf4f6f0" name="berndlorenzen.de" url="http://berndlorenzen.de">
-        <fileTransfer host="berndlorenzen.de" port="22" accessType="SFTP">
+      <webServer id="86035c47-a96d-4f15-bf11-f3e0acf4f6f0" name="grillDj" url="http://berndlorenzen.de">
+        <fileTransfer host="berndlorenzen.de" port="22" rootFolder="/home/bernd" accessType="SFTP">
           <advancedOptions>
             <advancedOptions dataProtectionLevel="Private" passiveMode="true" shareSSLContext="true" />
           </advancedOptions>
